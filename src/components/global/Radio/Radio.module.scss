@@ -1,0 +1,27 @@
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/colors";
+
+.radioCard {
+  cursor: pointer;
+}
+
+.radioContent {
+  @include layouts.flex-justify-between;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.radioInput {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border: 1px solid colors.$gray-600;
+  border-radius: 100%;
+  cursor: pointer;
+
+  &:checked::after {
+    height: 8px;
+    width: 8px;
+    background-color: colors.$gray-600;
+  }
+}

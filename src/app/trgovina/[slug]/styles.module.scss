@@ -1,0 +1,8 @@
+@use "../../../assets/css/grid";
+@use "../../../assets/css/spacings";
+
+.container {
+  @include grid.grid;
+  align-items: flex-start;
+  margin: spacings.$spacing-xxxl spacings.$spacing-xxxxl;
+}

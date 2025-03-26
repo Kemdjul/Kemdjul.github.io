@@ -1,0 +1,17 @@
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/colors";
+
+.counter {
+  @include layouts.flex;
+  align-items: center;
+
+  button:hover {
+    cursor: pointer;
+  }
+}
+
+.counterItem {
+  padding: 8px;
+  border: 0;
+  background-color: white;
+}

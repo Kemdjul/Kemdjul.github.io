@@ -1,0 +1,63 @@
+@use "../../../assets/css/grid";
+@use "../../../assets/css/responsive";
+
+@layer _components {
+  .hero {
+    @include grid.grid;
+
+    width: 100%;
+    overflow: hidden;
+    height: fit-content;
+    position: relative;
+  }
+
+  .heroTextContainer {
+    display: flex;
+    position: relative;
+    text-decoration: none;
+    z-index: 2;
+  }
+
+  .heroImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 30%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .heroText path {
+    fill: white;
+  }
+}
+
+@layer responsive {
+  .hero {
+    height: calc(100vh - 146px);
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      height: calc(100vh - 92px);
+    }
+  }
+
+  .heroTextContainer {
+    grid-column: 4 / span 4;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 1 / span 5;
+      margin: 0 16px;
+    }
+  }
+
+  .heroText svg {
+    width: 56px;
+    height: 56px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

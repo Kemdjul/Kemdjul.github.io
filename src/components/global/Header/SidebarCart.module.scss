@@ -1,0 +1,125 @@
+@use "../../../assets/css/colors";
+@use "../../../assets/css/grid";
+@use "../../../assets/css/spacings";
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/responsive";
+
+@layer _components {
+  .drawerBody {
+    @include layouts.flex-col-justify-between;
+    align-items: flex-start;
+    height: calc(100% - 60px);
+  }
+
+  .drawerTitle {
+    @include layouts.flex;
+    align-items: center;
+  }
+
+  .drawerUpper {
+    @include layouts.flex-col;
+  }
+
+  .drawerProducts {
+    @include layouts.flex-col;
+
+    li {
+      @include layouts.flex-justify-between;
+      align-items: center;
+      gap: 16px;
+    }
+  }
+
+  .drawerProduct {
+    @include layouts.flex-col-justify-between;
+    align-items: flex-start;
+    flex: 1;
+  }
+
+  .drawerProductPrice {
+    @include layouts.flex-justify-between;
+    width: 100%;
+  }
+
+  .drawerProductTrash {
+    background-color: none;
+    border: 0;
+    cursor: pointer;
+
+    svg path {
+      fill: colors.$gray-200;
+    }
+
+    &:hover svg path {
+      fill: colors.$gray-400;
+    }
+  }
+
+  .drawerLower {
+    @include layouts.flex-col;
+    width: 100%;
+  }
+
+  .drawerCTA {
+    @include layouts.flex-justify-between;
+
+    a {
+      color: colors.$blue;
+    }
+  }
+
+  .drawerTotalPrice {
+    @include layouts.flex-col;
+  }
+}
+
+@layer responsive {
+  .drawerTitle {
+    gap: 16px;
+
+    svg {
+      width: 48px;
+      height: 48px;
+    }
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      gap: 8px;
+
+      svg {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  }
+
+  .drawerUpper,
+  .drawerLower,
+  .drawerProducts {
+    gap: 32px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      gap: 16px;
+    }
+  }
+
+  .drawerProductTrash svg {
+    width: 40px;
+    height: 40px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .tempImg {
+    width: 160px;
+    height: 160px;
+    background-color: colors.$gray-300;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      width: 120px;
+      height: 120px;
+    }
+  }
+}

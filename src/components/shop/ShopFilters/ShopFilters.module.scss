@@ -1,0 +1,48 @@
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/colors";
+
+.filtersContainer {
+  grid-column: 1 / span 1;
+
+  @include layouts.flex-col;
+  gap: 8px;
+}
+
+.filtersCard {
+  @include layouts.flex-col;
+  gap: 16px;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.filtersOptions {
+  @include layouts.flex-col;
+  align-items: flex-start;
+}
+
+.filtersCategoriesButton {
+  border: 0;
+}
+
+.filtersTitle {
+  @include layouts.flex-justify-between;
+  border-bottom: 1px solid colors.$gray-200;
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.filtersCheckboxGroup {
+  @include layouts.flex-col;
+  gap: 4px;
+}
+
+.filtersCheckboxBody {
+  @include layouts.flex-justify-between;
+}
+
+.filtersPriceTrack::before {
+  background-color: colors.$gray-200;
+}

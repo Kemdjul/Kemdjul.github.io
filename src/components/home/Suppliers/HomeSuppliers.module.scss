@@ -1,0 +1,74 @@
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/responsive";
+
+@layer _components {
+  .container {
+    @include layouts.flex-col;
+  }
+
+  .suppliers {
+    width: 100%;
+  }
+
+  .supplierContainer {
+    display: flex;
+    position: relative;
+    flex: 1;
+  }
+
+  .supplierImage {
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .supplierText {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    color: white;
+    padding: 24px;
+    z-index: 1;
+  }
+}
+
+@layer responsive {
+  .container {
+    gap: 32px;
+    margin: 64px 120px;
+    align-items: flex-end;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      gap: 16px;
+      margin: 32px 16px;
+      align-items: flex-start;
+    }
+  }
+
+  .suppliers {
+    @include layouts.flex;
+    gap: 16px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      @include layouts.flex-col;
+    }
+  }
+
+  .supplierContainer {
+    @media (min-width: responsive.$breakpoint-lg) {
+      height: 320px;
+    }
+  }
+
+  .suppliersCTA svg {
+    width: 38px;
+    height: 38px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      width: 28px;
+      height: 28px;
+    }
+  }
+}

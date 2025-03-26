@@ -1,0 +1,47 @@
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/responsive";
+
+@layer _components {
+  .categoriesCardContainer {
+    flex: 1;
+  }
+
+  .categoriesCard {
+    align-items: stretch;
+    flex: 1;
+
+    &Text {
+      @include layouts.flex-col-justify-between;
+      align-items: flex-start;
+      gap: 8px;
+      flex: 1;
+    }
+  }
+}
+
+@layer responsive {
+  .categoriesContainer {
+    @include layouts.flex-justify-between;
+    margin: 32px 200px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      @include layouts.flex-col;
+      gap: 16px;
+      margin: 32px 16px;
+    }
+  }
+
+  .categoriesCard {
+    @include layouts.flex-col;
+    gap: 16px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      @include layouts.flex-justify-between;
+
+      svg {
+        width: 48px;
+        height: 48px;
+      }
+    }
+  }
+}

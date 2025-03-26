@@ -1,0 +1,52 @@
+@use "../../../assets/css/layouts";
+
+.container {
+  grid-column: 6 / span 3;
+  @include layouts.flex-col;
+  gap: 32px;
+}
+
+.productTitle {
+  @include layouts.flex-col;
+  gap: 8px;
+}
+
+.productSelects {
+  @include layouts.flex-col;
+  gap: 8px;
+}
+
+.productSelectContainer {
+  @include layouts.flex-justify-between;
+}
+
+.productSelect {
+  @include layouts.flex-col;
+  align-items: flex-end;
+}
+
+.productSelectWithGuide {
+  @include layouts.flex-justify-between;
+  width: 100%;
+}
+
+.productCards {
+  @include layouts.flex-col;
+  gap: 8px;
+}
+
+.productCard {
+  @include layouts.flex-justify-between;
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.productCTA {
+  @include layouts.flex-justify-between;
+}
+
+.productPrices {
+  @include layouts.flex-col;
+}

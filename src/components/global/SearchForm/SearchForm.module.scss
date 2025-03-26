@@ -1,0 +1,22 @@
+@use "../../../assets/css/colors";
+
+.searchForm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+
+  svg {
+    width: 28px;
+    height: 28px;
+
+    path {
+      fill: colors.$gray-600;
+    }
+  }
+}
+
+.searchRoot {
+  width: 100%;
+}

@@ -1,0 +1,52 @@
+@use "../../../assets/css/colors";
+@use "../../../assets/css/layouts";
+
+.container {
+  grid-column: 5 / span 4;
+  @include layouts.flex-col;
+  gap: 32px;
+}
+
+.checkoutProducts {
+  @include layouts.flex-col;
+  gap: 32px;
+}
+
+.checkoutProductItem {
+  @include layouts.flex-col;
+  gap: 16px;
+}
+
+.checkoutProductUpper {
+  @include layouts.flex-justify-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.checkoutProductDesc {
+  @include layouts.flex-col;
+  gap: 16px;
+}
+
+.checkoutProductName {
+  @include layouts.flex-col;
+}
+
+.checkoutProductSelects {
+  @include layouts.flex-col;
+  gap: 8px;
+}
+
+.checkoutProductSelect {
+  @include layouts.flex-justify-between;
+}
+
+.checkoutProductLower {
+  @include layouts.flex-justify-between;
+}
+
+.tempImage {
+  width: 240px;
+  height: 280px;
+  background-color: colors.$gray-200;
+}
