@@ -1,0 +1,71 @@
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/responsive";
+
+@layer _components {
+  .categories {
+    @include layouts.flex-col;
+    gap: 32px;
+
+    .categoryRow {
+      @include layouts.flex-justify-between;
+      gap: 32px;
+    }
+
+    li {
+      position: relative;
+      width: 100%;
+    }
+  }
+
+  .categoryLink {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    color: white;
+    text-decoration: none;
+  }
+
+  .categoryImage {
+    max-width: 100vw;
+    height: auto;
+    object-fit: cover;
+    object-position: 30%;
+  }
+}
+
+@layer responsive {
+  .categoriesContainer {
+    margin: 64px 120px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      margin: 16px 0;
+    }
+  }
+
+  .categories {
+    gap: 32px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      gap: 16px;
+    }
+  }
+
+  .categoryRow {
+    @include layouts.flex-justify-between;
+    gap: 32px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      @include layouts.flex-col;
+      gap: 16px;
+    }
+  }
+
+  .categoryLink {
+    padding: 32px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      padding: 16px;
+    }
+  }
+}

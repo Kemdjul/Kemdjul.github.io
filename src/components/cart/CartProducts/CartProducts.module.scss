@@ -1,0 +1,52 @@
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/colors";
+
+.container {
+  grid-column: 1 / span 4;
+  @include layouts.flex-col;
+  gap: 32px;
+}
+
+.cartProducts {
+  @include layouts.flex-col;
+  gap: 32px;
+}
+
+.cartProductItem {
+  @include layouts.flex-col;
+  gap: 16px;
+}
+
+.cartProductUpper {
+  @include layouts.flex-justify-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.cartProductDesc {
+  @include layouts.flex-col;
+  gap: 16px;
+}
+
+.cartProductName {
+  @include layouts.flex-col;
+}
+
+.cartProductSelects {
+  @include layouts.flex-col;
+  gap: 8px;
+}
+
+.cartProductSelect {
+  @include layouts.flex-justify-between;
+}
+
+.cartProductLower {
+  @include layouts.flex-justify-between;
+}
+
+.tempImage {
+  width: 240px;
+  height: 280px;
+  background-color: colors.$gray-200;
+}

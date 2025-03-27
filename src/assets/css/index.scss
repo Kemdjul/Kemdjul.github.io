@@ -1,0 +1,8 @@
+@use "./layers";
+@use "./reset";
+@use "./colors";
+@use "./responsive";
+
+body {
+  background-color: colors.$gray-100;
+}

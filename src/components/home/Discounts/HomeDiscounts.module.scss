@@ -1,0 +1,76 @@
+@use "../../../assets/css/colors";
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/responsive";
+
+@layer _components {
+  .container {
+    @include layouts.flex-col;
+  }
+
+  .productContainer {
+    @include layouts.flex-col;
+    gap: 16px;
+  }
+
+  .productImage {
+    height: 320px;
+    background-color: white;
+  }
+
+  .productText {
+    @include layouts.flex-col;
+  }
+
+  .productPrice {
+    @include layouts.flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .indicators {
+    @include layouts.flex-center;
+    gap: 8px;
+  }
+
+  .indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    border: 0;
+    background-color: colors.$gray-200;
+    transition: width 250ms ease;
+
+    &[data-active] {
+      background-color: colors.$gray-600;
+      width: 24px;
+    }
+  }
+}
+
+@layer responsive {
+  .container {
+    gap: 32px;
+    margin: 64px 120px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      gap: 16px;
+      margin: 32px 16px;
+    }
+  }
+
+  .productText {
+    gap: 8px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      gap: 0;
+    }
+  }
+
+  .indicators {
+    margin: 32px 120px;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      margin: 16px 32px;
+    }
+  }
+}

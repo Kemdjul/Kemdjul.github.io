@@ -1,0 +1,126 @@
+@use "../../../assets/css/colors";
+@use "../../../assets/css/grid";
+@use "../../../assets/css/spacings";
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/responsive";
+
+@layer _components {
+  .header {
+    @include layouts.flex-col;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    color: white;
+
+    svg path {
+      fill: white;
+    }
+  }
+
+  .headerUpper {
+    @include grid.grid;
+    background-color: colors.$gray-600;
+
+    .headerLogo {
+      text-decoration: none;
+    }
+
+    .headerIcons {
+      @include layouts.flex-center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .headerIcon,
+    .headerSearchCloseIcon {
+      @include layouts.flex-center;
+      justify-content: flex-end;
+
+      .headerIconButton {
+        background: none;
+        border: 0;
+        cursor: pointer;
+
+        max-width: spacings.$l;
+        max-height: spacings.$l;
+
+        @media (max-width: responsive.$breakpoint-lg) {
+          max-width: spacings.$s;
+          max-height: spacings.$s;
+        }
+
+        svg {
+          width: spacings.$l;
+          height: spacings.$l;
+
+          @media (max-width: responsive.$breakpoint-lg) {
+            width: spacings.$s;
+            height: spacings.$s;
+          }
+
+          path {
+            fill: white;
+            background-color: white;
+          }
+        }
+
+        &:hover svg path {
+          transition: all 0.15s;
+          fill: colors.$gray-400;
+        }
+      }
+    }
+  }
+
+  .headerLower {
+    @include layouts.flex-justify-between;
+    background-color: colors.$gray-500;
+
+    .headerLowerNav {
+      @include layouts.flex-justify-between;
+      width: 100%;
+    }
+  }
+}
+
+@layer responsive {
+  .headerLogo {
+    grid-column: 1 / span 2;
+  }
+
+  .headerUpper {
+    padding: spacings.$xs spacings.$xxxxl;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      padding: spacings.$m spacings.$xs;
+    }
+  }
+
+  .headerSearch {
+    grid-column: 4 / span 2;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 1 / span 4;
+    }
+  }
+
+  .headerIcons {
+    grid-column: 7 / span 2;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 4 / span 2;
+    }
+  }
+
+  .headerSearchIcon {
+    grid-column: 5 / span 1;
+  }
+
+  .headerLower {
+    padding: spacings.$xs spacings.$xxxxl;
+  }
+
+  .headerLowerNav {
+    padding: 0 spacings.$xxxxl;
+  }
+}
