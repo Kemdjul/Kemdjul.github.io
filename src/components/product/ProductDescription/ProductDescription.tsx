@@ -15,15 +15,15 @@ import styles from "./ProductDescription.module.scss";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
 
-const ProductDescription = () => {
+const ProductDescription = ({ product }) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
 
   const items = [
-    { title: "Trgovina", href: "#" },
-    { title: "Duksa", href: "#" },
+    { title: "Trgovina", href: "/trgovina" },
+    { title: product.title, href: "#" },
   ].map((item, index) => (
     <Anchor href={item.href} key={index}>
-      <Text size={isMobile ? "p" : "caption"}>{item.title}</Text>
+      <Text size={isMobile ? "caption" : "p"}>{item.title}</Text>
     </Anchor>
   ));
 
@@ -36,7 +36,7 @@ const ProductDescription = () => {
         <Breadcrumbs>{items}</Breadcrumbs>
         <span className={styles.productTitle}>
           <Title order={3} size={isMobile ? "h5" : "h3"} fw={"700"}>
-            Dukse s kapuljačom
+            {product.title}
           </Title>
           <Title order={5} size={isMobile ? "p" : "h5"} c={"#26733A"}>
             Dostupno
@@ -98,14 +98,14 @@ const ProductDescription = () => {
             c="#666666"
             td="line-through"
           >
-            99.99€
+            {product.priceRange.minVariantPrice.amount}€
           </Title>
           <Title
             order={4}
             size={isMobile ? "h5" : "h4"}
             fw={isMobile ? 500 : 700}
           >
-            99.99€
+            {product.priceRange.minVariantPrice.amount}€
           </Title>
         </span>
 
