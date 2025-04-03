@@ -54,24 +54,37 @@ export const getProduct = async (
     query getProduct($id: ID!) {
       product(id: $id) {
         id
-        handle
         title
+        availableForSale
         description
         priceRange {
           minVariantPrice {
             amount
-            currencyCode
+          }
+          maxVariantPrice {
+            amount
           }
         }
         featuredImage {
           url
           altText
         }
-        variants(first: 10) {
+        images(first: 5) {
           edges {
             node {
               id
+              url
+              altText
             }
+            cursor
+          }
+        }
+        options {
+          id
+          name
+          optionValues {
+            id
+            name
           }
         }
       }

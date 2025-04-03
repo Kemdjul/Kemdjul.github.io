@@ -106,14 +106,16 @@ const Header = () => {
                   </Button>
                 </span>
 
-                <span className={styles.headerIcon}>
-                  <Burger
-                    opened={openMenu}
-                    onClick={() => setOpenMenu(!openMenu)}
-                    size={isMobile ? "sm" : "md"}
-                    color="white"
-                  />
-                </span>
+                {isMobile && (
+                  <span className={styles.headerIcon}>
+                    <Burger
+                      opened={openMenu}
+                      onClick={() => setOpenMenu(!openMenu)}
+                      size={isMobile ? "sm" : "md"}
+                      color="white"
+                    />
+                  </span>
+                )}
               </div>
             </div>
           )}

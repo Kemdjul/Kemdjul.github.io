@@ -76,6 +76,10 @@
   .cartLink {
     text-decoration: none;
   }
+
+  .productImage {
+    object-fit: cover;
+  }
 }
 
 @layer responsive {
@@ -114,17 +118,6 @@
     @media (max-width: responsive.$breakpoint-lg) {
       width: 32px;
       height: 32px;
-    }
-  }
-
-  .tempImg {
-    width: 160px;
-    height: 160px;
-    background-color: colors.$gray-300;
-
-    @media (max-width: responsive.$breakpoint-lg) {
-      width: 120px;
-      height: 120px;
     }
   }
 }

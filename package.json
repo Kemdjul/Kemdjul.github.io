@@ -17,6 +17,7 @@
     "@mantine/modals": "^7.16.2",
     "@mantine/notifications": "^7.16.2",
     "@mantine/nprogress": "^7.16.2",
+    "@reduxjs/toolkit": "^2.6.1",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^8.5.2",
     "graphql-request": "^7.1.2",
@@ -25,7 +26,8 @@
     "next-themes": "^0.4.4",
     "prettier-eslint": "^16.3.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

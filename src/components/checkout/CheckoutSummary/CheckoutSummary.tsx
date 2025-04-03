@@ -5,9 +5,17 @@ import Separator from "~/components/global/Separator/Separator";
 import styles from "./CheckoutSummary.module.scss";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
+import { useAppSelector } from "~/store/hooks";
+import {
+  selectCartItems,
+  selectCartTotal,
+} from "~/store/features/cart/cartSlice";
+import Image from "next/image";
 
 const CheckoutSummary = () => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+  const totalPrice = useAppSelector(selectCartTotal);
+  const items = useAppSelector(selectCartItems);
 
   return (
     <section className={styles.container}>
@@ -19,67 +27,84 @@ const CheckoutSummary = () => {
 
       <span>
         <Text size={isMobile ? "h6" : "h4"} fw={700}>
-          Ukupno: 130.00€
+          Ukupno: {totalPrice + 2}€
         </Text>
-        <Text size={isMobile ? "h6" : "h4"}>Troškovi dostave: 10.00€</Text>
+        <Text size={isMobile ? "h6" : "h4"}>Troškovi dostave: 2.00€</Text>
       </span>
 
       <Separator />
 
       <ul className={styles.checkoutProducts}>
-        <li className={styles.checkoutProductItem}>
-          <div className={styles.checkoutProductUpper}>
-            <div className={styles.tempImage} />
-
-            <div className={styles.checkoutProductDesc}>
-              <span className={styles.checkoutProductName}>
-                <Title
-                  order={4}
-                  size={isMobile ? "h5" : "h3"}
-                  fw={isMobile ? 500 : 700}
-                >
-                  Lorem ipsum
-                </Title>
-                <Text size={isMobile ? "p" : "h6"}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse a magna metus.
-                </Text>
+        {items.map((item) => (
+          <li className={styles.checkoutProductItem} key={item}>
+            <div className={styles.checkoutProductUpper}>
+              <span>
+                <Image
+                  loader={() => item.featuredImage.url}
+                  src={item.featuredImage.url}
+                  alt={item.featuredImage.alt}
+                  width={240}
+                  height={280}
+                  className={styles.productImage}
+                />
               </span>
 
-              <div className={styles.checkoutProductSelects}>
-                <span className={styles.checkoutProductSelect}>
-                  <Title order={4} size={isMobile ? "p" : "h6"}>
-                    Veličina:
+              <div className={styles.checkoutProductDesc}>
+                <span className={styles.checkoutProductName}>
+                  <Title
+                    order={4}
+                    size={isMobile ? "h5" : "h3"}
+                    fw={isMobile ? 500 : 700}
+                  >
+                    {item.title}
                   </Title>
-                  <Select />
+                  <Text size={isMobile ? "p" : "h6"}>{item.description}</Text>
                 </span>
 
-                <span className={styles.checkoutProductSelect}>
-                  <Title order={4} size={isMobile ? "p" : "h6"}>
-                    Boja:
-                  </Title>
-                  <Select />
-                </span>
+                <div className={styles.checkoutProductSelects}>
+                  <span className={styles.checkoutProductSelect}>
+                    <Title order={4} size={isMobile ? "p" : "h6"}>
+                      Veličina:
+                    </Title>
+                    <Text>{item.size}</Text>
+                  </span>
+
+                  <span className={styles.checkoutProductSelect}>
+                    <Title order={4} size={isMobile ? "p" : "h6"}>
+                      Boja:
+                    </Title>
+                    <Text>{item.color}</Text>
+                  </span>
+                </div>
+
+                {!isMobile && (
+                  <Text size="h5">
+                    {item.priceRange.minVariantPrice.amount}€
+                  </Text>
+                )}
               </div>
-
-              {!isMobile && <Text size="h5">120.00€</Text>}
             </div>
-          </div>
 
-          <div className={styles.checkoutProductLower}>
-            <Counter />
+            <div className={styles.checkoutProductLower}>
+              <Counter
+                amount={item.amount}
+                onAddClick={() => {}}
+                onRemoveClick={() => {}}
+              />
 
-            {isMobile ? (
-              <Text size="h6" fw={500}>
-                120.00€
-              </Text>
-            ) : (
-              <Text size="h5" fw={700}>
-                Ukupno: 120.00€
-              </Text>
-            )}
-          </div>
-        </li>
+              {isMobile ? (
+                <Text size="h6" fw={500}>
+                  {item.priceRange.minVariantPrice.amount * item.amount}€
+                </Text>
+              ) : (
+                <Text size="h5" fw={700}>
+                  Ukupno: {item.priceRange.minVariantPrice.amount * item.amount}
+                  €
+                </Text>
+              )}
+            </div>
+          </li>
+        ))}
       </ul>
     </section>
   );

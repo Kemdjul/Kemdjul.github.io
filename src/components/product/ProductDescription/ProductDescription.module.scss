@@ -31,14 +31,6 @@
     @include layouts.flex-col;
     gap: 8px;
   }
-
-  .productCard {
-    @include layouts.flex-justify-between;
-    svg {
-      width: 28px;
-      height: 28px;
-    }
-  }
 }
 
 @layer responsive {

@@ -3,11 +3,11 @@ import { Text } from "@mantine/core";
 import Button from "../Button/Button";
 import styles from "./Counter.module.scss";
 
-const Counter = () => {
+const Counter = ({ amount, onAddClick, onRemoveClick }) => {
   return (
     <div className={styles.counter}>
       <Button
-        onClick={() => {}}
+        onClick={onAddClick}
         includeStyles={false}
         className={styles.counterItem}
       >
@@ -17,11 +17,11 @@ const Counter = () => {
       </Button>
 
       <span className={styles.counterItem}>
-        <Text size="h5">1</Text>
+        <Text size="h5">{amount}</Text>
       </span>
 
       <Button
-        onClick={() => {}}
+        onClick={onRemoveClick}
         includeStyles={false}
         className={styles.counterItem}
       >

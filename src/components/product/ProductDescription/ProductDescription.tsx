@@ -1,34 +1,49 @@
 "use client";
-import {
-  Breadcrumbs,
-  Anchor,
-  Card,
-  Select,
-  Title,
-  Text,
-  em,
-} from "@mantine/core";
+import { Breadcrumbs, Anchor, Select, Title, Text, em } from "@mantine/core";
 import Link from "next/link";
-import ArrowDown from "~/assets/svg/ArrowDown";
 import Button from "~/components/global/Button/Button";
 import styles from "./ProductDescription.module.scss";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
+import ProductDescriptionCard from "./ProductDescriptionCard/ProductDescriptionCard";
+import { useAppDispatch, useAppSelector } from "~/store/hooks";
+import { addItem, selectCartItems } from "~/store/features/cart/cartSlice";
+import { useState } from "react";
 
-const ProductDescription = () => {
+const ProductDescription = ({ product }) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector(selectCartItems);
+
+  const [color, setColor] = useState<string | null>("");
+  const colorSelectData = product.options[0].optionValues.map(
+    (value) => value.name
+  );
+
+  const [size, setSize] = useState<string | null>("");
+  const sizeSelectData = product.options[1].optionValues.map(
+    (value) => value.name
+  );
+
+  const addToCartAction = () => {
+    if (!color || !size) return;
+
+    dispatch(addItem({ ...product, amount: 1, color: color, size: size }));
+  };
+
+  const alreadyInCart = cart.some(
+    (item) =>
+      item.id === product.id && item.color === color && item.size === size
+  );
 
   const items = [
-    { title: "Trgovina", href: "#" },
-    { title: "Duksa", href: "#" },
+    { title: "Trgovina", href: "/trgovina" },
+    { title: product.title, href: "#" },
   ].map((item, index) => (
     <Anchor href={item.href} key={index}>
-      <Text size={isMobile ? "p" : "caption"}>{item.title}</Text>
+      <Text size={isMobile ? "caption" : "p"}>{item.title}</Text>
     </Anchor>
   ));
-
-  const colorSelectData = ["Crvena", "Zelena", "Žuta", "Crna"];
-  const sizeSelectData = ["M", "L", "XL", "XXL", "XXXL", "XXXXL"];
 
   return (
     <section className={styles.container}>
@@ -36,11 +51,17 @@ const ProductDescription = () => {
         <Breadcrumbs>{items}</Breadcrumbs>
         <span className={styles.productTitle}>
           <Title order={3} size={isMobile ? "h5" : "h3"} fw={"700"}>
-            Dukse s kapuljačom
+            {product.title}
           </Title>
-          <Title order={5} size={isMobile ? "p" : "h5"} c={"#26733A"}>
-            Dostupno
-          </Title>
+          {product.availableForSale ? (
+            <Title order={5} size={isMobile ? "p" : "h5"} c={"#26733A"}>
+              Dostupno
+            </Title>
+          ) : (
+            <Title order={5} size={isMobile ? "p" : "h5"} c={"#E94646"}>
+              Nedostupno
+            </Title>
+          )}
         </span>
       </div>
 
@@ -48,6 +69,8 @@ const ProductDescription = () => {
         <div className={styles.productSelectContainer}>
           <Title order={6}>Boja:</Title>
           <Select
+            value={color}
+            onChange={setColor}
             placeholder="Odaberi boju..."
             data={colorSelectData}
             comboboxProps={{
@@ -60,6 +83,8 @@ const ProductDescription = () => {
           <div className={styles.productSelectWithGuide}>
             <Title order={6}>Veličina:</Title>
             <Select
+              value={size}
+              onChange={setSize}
               placeholder="Odaberi veličinu..."
               data={sizeSelectData}
               comboboxProps={{
@@ -75,41 +100,43 @@ const ProductDescription = () => {
       </div>
 
       <div className={styles.productCards}>
-        <Card padding="md" shadow="md" className={styles.productCard}>
-          <Title size={isMobile ? "h6" : "h5"} order={5}>
-            Opis o proizvodu
-          </Title>
-          <ArrowDown />
-        </Card>
+        <ProductDescriptionCard
+          title="Opis o proizvodu"
+          desc={product.description}
+        />
 
-        <Card padding="md" shadow="md" className={styles.productCard}>
-          <Title size={isMobile ? "h6" : "h5"} order={5}>
-            Sastav
-          </Title>
-          <ArrowDown />
-        </Card>
+        <ProductDescriptionCard title="Sastav" desc={product.composition} />
       </div>
 
       <div className={styles.productCTA}>
         <span className={styles.productPrices}>
-          <Title
-            order={5}
-            size={isMobile ? "h6" : "h5"}
-            c="#666666"
-            td="line-through"
-          >
-            99.99€
-          </Title>
+          {product.maxVariantPrice !== product.minVariantPrice ? (
+            <Title
+              order={5}
+              size={isMobile ? "h6" : "h5"}
+              c="#666666"
+              td="line-through"
+            >
+              {product.priceRange.maxVariantPrice.amount}€
+            </Title>
+          ) : (
+            ""
+          )}
           <Title
             order={4}
             size={isMobile ? "h5" : "h4"}
             fw={isMobile ? 500 : 700}
           >
-            99.99€
+            {product.priceRange.minVariantPrice.amount}€
           </Title>
         </span>
 
-        <Button onClick={() => {}}>Dodaj u košaricu</Button>
+        <Button
+          onClick={() => addToCartAction()}
+          disabled={alreadyInCart || !size || !color}
+        >
+          {alreadyInCart ? "Već u košarici" : "Dodaj u košaricu"}
+        </Button>
       </div>
 
       <Text size="h6">

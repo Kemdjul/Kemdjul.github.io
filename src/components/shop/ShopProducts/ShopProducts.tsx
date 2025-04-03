@@ -64,7 +64,7 @@ const ShopProducts = ({ products }) => {
         {products?.map((product) => (
           <Link
             key={product.node.id}
-            href={`/trgovina/${product.node.handle}`}
+            href={`/trgovina/${product.node.id.split("/")[4]}`}
             className={styles.productsItem}
             style={{ textDecoration: "none" }}
           >

@@ -70,10 +70,10 @@
     }
   }
 
-  .tempImage {
+  .productImage {
     width: 240px;
     height: 280px;
-    background-color: colors.$gray-200;
+    object-fit: cover;
 
     @media (max-width: responsive.$breakpoint-lg) {
       width: 100%;

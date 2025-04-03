@@ -1,0 +1,18 @@
+@use "../../../../assets/css/layouts";
+
+@layer _components {
+  .productCard {
+    @include layouts.flex-col;
+    cursor: pointer;
+
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    &Section {
+      @include layouts.flex-justify-between;
+      padding: 12px;
+    }
+  }
+}

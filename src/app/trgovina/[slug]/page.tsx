@@ -4,8 +4,20 @@ import ProductRecommended from "~/components/product/ProductRecommended/ProductR
 import styles from "./styles.module.scss";
 
 import * as motion from "motion/react-client";
+import { getProduct } from "~/utils/shopify";
 
-const page = () => {
+const page: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+} = async ({ params, searchParams }) => {
+  const product = await getProduct(
+    process.env.SHOPIFY_ENDPOINT,
+    process.env.SHOPIFY_API_TOKEN,
+    `gid://shopify/Product/${params.slug}`
+  );
+
+  console.log(product);
+
   return (
     <motion.main
       className={styles.container}
@@ -16,8 +28,8 @@ const page = () => {
       key="product"
       layout
     >
-      <ProductGallery />
-      <ProductDescription />
+      <ProductGallery product={product} />
+      <ProductDescription product={product} />
       <ProductRecommended />
     </motion.main>
   );

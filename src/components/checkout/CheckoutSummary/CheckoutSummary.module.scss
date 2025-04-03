@@ -15,6 +15,7 @@
 
   .checkoutProductDesc {
     @include layouts.flex-col;
+    width: 100%;
     gap: 16px;
   }
 
@@ -38,11 +39,12 @@
 
 @layer responsive {
   .container {
-    grid-column: 1 / span 5;
     @include layouts.flex-col;
+    grid-column: 5 / span 4;
     gap: spacings.$spacing-m;
 
     @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 1 / span 5;
       gap: spacings.$spacing-xs;
     }
   }
@@ -67,10 +69,10 @@
     }
   }
 
-  .tempImage {
+  .productImage {
     width: 240px;
     height: 280px;
-    background-color: colors.$gray-200;
+    object-fit: cover;
 
     @media (max-width: responsive.$breakpoint-lg) {
       width: 100%;

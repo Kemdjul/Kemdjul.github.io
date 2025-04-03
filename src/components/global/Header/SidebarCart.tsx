@@ -9,14 +9,30 @@ import styles from "./SidebarCart.module.scss";
 
 import Trash from "~/assets/svg/Trash";
 import Cart from "~/assets/svg/Cart";
+import { useAppDispatch, useAppSelector } from "~/store/hooks";
+import {
+  selectCartTotal,
+  selectCartItems,
+  removeItem,
+} from "~/store/features/cart/cartSlice";
+import Image from "next/image";
 
-type Props = {
+interface Props {
   opened: boolean;
   close: () => void;
-};
+}
 
 const SidebarCart = ({ opened, close }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+  const items = useAppSelector(selectCartItems);
+  const totalPrice = useAppSelector(selectCartTotal);
+  const dispatch = useAppDispatch();
+
+  const onDeleteClick = (product) => {
+    dispatch(
+      removeItem({ id: product.id, size: product.size, color: product.color })
+    );
+  };
 
   return (
     <Drawer
@@ -41,55 +57,48 @@ const SidebarCart = ({ opened, close }: Props) => {
         <Separator />
 
         <ul className={styles.drawerProducts}>
-          <li>
-            <div className={styles.tempImg} />
+          {items.map((product) => (
+            <li key={product}>
+              <Image
+                loader={() => product.featuredImage.url}
+                src={product.featuredImage.url}
+                alt={product.featuredImage.alt}
+                width={160}
+                height={160}
+                className={styles.productImage}
+              />
 
-            <div className={styles.drawerProduct}>
-              <span>
-                <Title order={5} size={isMobile ? "h6" : "h5"} fw={700}>
-                  Dukserica s kapuljačom i dodatcima
-                </Title>
-                <Text size={isMobile ? "p" : "h6"}>L, crvena</Text>
-              </span>
+              <div className={styles.drawerProduct}>
+                <span>
+                  <Title order={5} size={isMobile ? "h6" : "h5"} fw={700}>
+                    {product.title}
+                  </Title>
+                  <Text size={isMobile ? "p" : "h6"}>
+                    {product.size}, {product.color}
+                  </Text>
+                </span>
 
-              <span className={styles.drawerProductPrice}>
-                <Counter />
-                <Text size={isMobile ? "h5" : "h4"} fw={700}>
-                  99.99€
-                </Text>
-              </span>
-            </div>
+                <span className={styles.drawerProductPrice}>
+                  <Counter
+                    amount={product.amount}
+                    onAddClick={() => {}}
+                    onRemoveClick={() => {}}
+                  />
+                  <Text size={isMobile ? "h5" : "h4"} fw={700}>
+                    {product.priceRange.minVariantPrice.amount}€
+                  </Text>
+                </span>
+              </div>
 
-            <Button includeStyles={false} className={styles.drawerProductTrash}>
-              <Trash />
-            </Button>
-          </li>
-
-          <Separator />
-
-          <li>
-            <div className={styles.tempImg} />
-
-            <div className={styles.drawerProduct}>
-              <span>
-                <Title order={5} size={isMobile ? "h6" : "h5"} fw={700}>
-                  Dukserica s kapuljačom i dodatcima
-                </Title>
-                <Text size={isMobile ? "p" : "h6"}>L, crvena</Text>
-              </span>
-
-              <span className={styles.drawerProductPrice}>
-                <Counter />
-                <Text size={isMobile ? "h5" : "h4"} fw={700}>
-                  99.99€
-                </Text>
-              </span>
-            </div>
-
-            <Button includeStyles={false} className={styles.drawerProductTrash}>
-              <Trash />
-            </Button>
-          </li>
+              <Button
+                onClick={() => onDeleteClick(product)}
+                includeStyles={false}
+                className={styles.drawerProductTrash}
+              >
+                <Trash />
+              </Button>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -99,7 +108,7 @@ const SidebarCart = ({ opened, close }: Props) => {
         <div className={styles.drawerCTA}>
           <span className={styles.drawerTotalPrice}>
             <Text size={isMobile ? "h5" : "h4"} fw={700}>
-              Subtotal: 99.00€
+              Subtotal: {totalPrice}€
             </Text>
             <Text size={isMobile ? "p" : "h6"}>
               Način dostave birate pri plaćanju.
