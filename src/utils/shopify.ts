@@ -31,7 +31,9 @@ export async function getAllProducts(endpoint: string, token: string) {
   `;
 
   try {
-    return await graphQLClient.request(getAllProductsQuery);
+    const getAllProductsResult =
+      await graphQLClient.request(getAllProductsQuery);
+    return getAllProductsResult?.products.edges;
   } catch (err) {
     throw new Error(err, undefined);
   }

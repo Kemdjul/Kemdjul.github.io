@@ -18,6 +18,7 @@
 
   .drawerUpper {
     @include layouts.flex-col;
+    width: 100%;
   }
 
   .drawerProducts {
@@ -70,6 +71,10 @@
 
   .drawerTotalPrice {
     @include layouts.flex-col;
+  }
+
+  .cartLink {
+    text-decoration: none;
   }
 }
 

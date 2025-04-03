@@ -1,32 +1,54 @@
 @use "../../../assets/css/layouts";
 @use "../../../assets/css/colors";
+@use "../../../assets/css/responsive";
+@use "../../../assets/css/spacings";
 
-.container {
-  grid-column: 5 / span 4;
-  @include layouts.flex-col;
-  gap: 32px;
-}
-
-.summaryPrice {
-  @include layouts.flex-justify-between;
-}
-
-.summaryCards {
-  @include layouts.flex-col;
-  gap: 16px;
-}
-
-.summaryCard {
-  @include layouts.flex-justify-between;
-  gap: 16px;
-
-  svg {
-    width: 64px;
-    height: 64px;
+@layer _components {
+  .container {
+    @include layouts.flex-col;
   }
 
-  span {
+  .summaryPrice {
+    @include layouts.flex-justify-between;
+  }
+
+  .summaryCards {
     @include layouts.flex-col;
-    gap: 8px;
+    gap: 16px;
+  }
+
+  .summaryCard {
+    @include layouts.flex-justify-between;
+    gap: 16px;
+
+    svg {
+      width: 64px;
+      height: 64px;
+    }
+
+    span {
+      @include layouts.flex-col;
+      gap: 8px;
+    }
+  }
+}
+
+@layer responsive {
+  .container {
+    grid-column: 5 / span 4;
+    gap: spacings.$spacing-m;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 1 / span 5;
+      gap: spacings.$spacing-xs;
+    }
+  }
+
+  .summaryPrice {
+    @media (max-width: responsive.$breakpoint-lg) {
+      @include layouts.flex-col;
+      align-items: flex-start;
+      gap: spacings.$spacing-xs;
+    }
   }
 }

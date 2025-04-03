@@ -1,13 +1,19 @@
-import { Text, Title } from "@mantine/core";
+"use client";
+import { em, Text, Title } from "@mantine/core";
 import { Carousel, CarouselSlide } from "@mantine/carousel";
 import styles from "./CartRecommended.module.scss";
 
 import * as motion from "motion/react-client";
+import { useMediaQuery } from "@mantine/hooks";
+import { breakpoints } from "~/utils/breakpoints";
 
 const CartRecommended = () => {
+  const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+  const isTablet = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+
   return (
     <section className={styles.container}>
-      <Title order={3} fw={700}>
+      <Title order={3} size={isMobile ? "h5" : "h3"} fw={700}>
         Možda vam se svidi
       </Title>
 
@@ -17,7 +23,7 @@ const CartRecommended = () => {
         withControls={false}
         containScroll="trimSnaps"
         type="container"
-        slideSize="25%"
+        slideSize={isMobile ? "100%" : isTablet ? "50%" : "25%"}
         slideGap="md"
         align="start"
         classNames={{

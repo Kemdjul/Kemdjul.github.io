@@ -3,8 +3,14 @@ import ShopProducts from "~/components/shop/ShopProducts/ShopProducts";
 import styles from "./styles.module.scss";
 
 import * as motion from "motion/react-client";
+import { getAllProducts } from "~/utils/shopify";
 
-const page = () => {
+const page = async () => {
+  const products = await getAllProducts(
+    process.env.SHOPIFY_ENDPOINT,
+    process.env.SHOPIFY_API_TOKEN
+  );
+
   return (
     <motion.main
       animate={{ opacity: 1, y: 0 }}
@@ -16,7 +22,7 @@ const page = () => {
       layout
     >
       <ShopFilters />
-      <ShopProducts />
+      <ShopProducts products={products} />
     </motion.main>
   );
 };

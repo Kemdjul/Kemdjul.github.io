@@ -1,53 +1,91 @@
 @use "../../../assets/css/layouts";
 @use "../../../assets/css/grid";
 @use "../../../assets/css/colors";
+@use "../../../assets/css/spacings";
+@use "../../../assets/css/responsive";
 
-.productsContainer {
-  height: 100%;
-  grid-column: 2 / span 7;
-  gap: 32px;
+@layer _components {
+  .products {
+    &Container {
+      @include layouts.flex-col;
+      height: 100%;
+    }
 
-  @include layouts.flex-col;
+    &ItemsContainer {
+      @include grid.gridProducts;
+    }
+
+    &Item {
+      @include layouts.flex-col;
+      width: 100%;
+      gap: 16px;
+    }
+
+    &Title {
+      @include layouts.flex-justify-between;
+      align-items: flex-start;
+    }
+
+    &Price {
+      @include layouts.flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &ItemTitle {
+      @include layouts.flex-col;
+      gap: 8px;
+      color: colors.$gray-600;
+    }
+
+    &PreviousPrice {
+      text-decoration: line-through;
+    }
+  }
+
+  .sortByRoot {
+    @include layouts.flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .productsItemsImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
-.productsItemsContainer {
-  @include grid.gridProducts;
-}
+@layer responsive {
+  .products {
+    &Container {
+      grid-column: 2 / span 7;
+      gap: spacings.$spacing-xs;
 
-.productsItem {
-  @include layouts.flex-col;
-  width: 100%;
-  gap: 16px;
-}
+      @media (max-width: responsive.$breakpoint-lg) {
+        grid-column: 1 / span 5;
+      }
+    }
 
-.productsTitle {
-  @include layouts.flex-justify-between;
-}
+    &Actions {
+      @include layouts.flex-col;
+      gap: spacings.$spacing-s;
+      align-items: flex-end;
 
-.productsPrice {
-  @include layouts.flex;
-  align-items: center;
-  gap: 8px;
-}
+      @media (max-width: responsive.$breakpoint-lg) {
+        gap: spacings.$spacing-xs;
+      }
+    }
 
-.productsItemTitle {
-  @include layouts.flex-col;
-  gap: 8px;
-  color: colors.$gray-600;
-}
+    &ActionsFilter {
+      @media (min-width: responsive.$breakpoint-lg) {
+        display: none;
+      }
 
-.productsPreviousPrice {
-  text-decoration: line-through;
-}
-
-.sortByRoot {
-  @include layouts.flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tempImage {
-  width: 100%;
-  height: 100%;
-  background-color: colors.$gray-200;
+      svg {
+        height: spacings.$spacing-xs;
+        width: spacings.$spacing-xs;
+      }
+    }
+  }
 }

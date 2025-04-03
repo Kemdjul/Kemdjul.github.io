@@ -1,14 +1,19 @@
 "use client";
-import { Card, Text, Title } from "@mantine/core";
+import { Card, em, Text, Title } from "@mantine/core";
 import Button from "~/components/global/Button/Button";
 import Truck from "~/assets/svg/Truck";
 import Separator from "~/components/global/Separator/Separator";
 import styles from "./CartSummary.module.scss";
+import { useMediaQuery } from "@mantine/hooks";
+import { breakpoints } from "~/utils/breakpoints";
+import Link from "next/link";
 
 const CartSummary = () => {
+  const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+
   return (
     <section className={styles.container}>
-      <Title order={3} fw={700}>
+      <Title order={3} size={isMobile ? "h5" : "h3"} fw={700}>
         Sažetak
       </Title>
 
@@ -16,16 +21,20 @@ const CartSummary = () => {
 
       <div className={styles.summaryPrice}>
         <span>
-          <Title order={4} fw={700}>
+          <Title order={4} size={isMobile ? "h6" : "h4"} fw={700}>
             Ukupno: 250.00€
           </Title>
-          <Text size="h6">Troškovi dostave: 10.00€</Text>
+          <Text size={isMobile ? "p" : "h6"}>Troškovi dostave: 10.00€</Text>
         </span>
 
-        <Button onClick={() => {}}>
-          <Text size="h5">Nastavi na plaćanje</Text>
-        </Button>
+        <Link href="/pregled" style={{ textDecoration: "none" }}>
+          <Button onClick={() => {}}>
+            <Text size="h5">Nastavi na plaćanje</Text>
+          </Button>
+        </Link>
       </div>
+
+      <Separator />
 
       <ul className={styles.summaryCards}>
         <li>
@@ -33,7 +42,7 @@ const CartSummary = () => {
             <Truck />
 
             <span>
-              <Title order={4} size="h5" fw={700}>
+              <Title order={4} size="h5" fw={isMobile ? 500 : 700}>
                 Povrat sredstva nakon 21 dan čekanja paketa
               </Title>
               <Text size="p">
@@ -50,7 +59,7 @@ const CartSummary = () => {
             <Truck />
 
             <span>
-              <Title order={4} size="h5" fw={700}>
+              <Title order={4} size="h5" fw={isMobile ? 500 : 700}>
                 Povrat sredstva nakon 21 dan čekanja paketa
               </Title>
               <Text size="p">
@@ -67,7 +76,7 @@ const CartSummary = () => {
             <Truck />
 
             <span>
-              <Title order={4} size="h5" fw={700}>
+              <Title order={4} size="h5" fw={isMobile ? 500 : 700}>
                 Povrat sredstva nakon 21 dan čekanja paketa
               </Title>
               <Text size="p">

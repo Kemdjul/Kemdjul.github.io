@@ -1,55 +1,82 @@
 @use "../../../assets/css/grid";
 @use "../../../assets/css/colors";
 @use "../../../assets/css/layouts";
+@use "../../../assets/css/spacings";
+@use "../../../assets/css/responsive";
 
-.container {
-  @include grid.grid;
-  background-color: colors.$gray-500;
-  padding: 32px 120px;
-  color: white;
+@layer _components {
+  .container {
+    @include grid.grid;
+    background-color: colors.$gray-500;
+    color: white;
 
-  svg path {
-    fill: white;
-  }
-}
-
-.footerText {
-  @include layouts.flex-col;
-  gap: 8px;
-}
-
-.footerTitle {
-  grid-column: 1 / span 8;
-  grid-row: 1;
-}
-
-.footerFirst {
-  grid-column: 1 / span 2;
-  grid-row: 2;
-}
-
-.footerSecond {
-  grid-column: 3 / span 2;
-  grid-row: 2;
-
-  div {
-    @include layouts.flex;
-    align-items: center;
-    gap: 8px;
-
-    svg {
-      width: 24px;
-      height: 24px;
+    svg path {
+      fill: white;
     }
   }
+
+  .footerText {
+    @include layouts.flex-col;
+    gap: 8px;
+  }
+
+  .footerTitle {
+    grid-column: 1 / span 8;
+    grid-row: 1;
+  }
+
+  .footerFirst {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+  }
+
+  .footerSecond {
+    grid-column: 3 / span 2;
+    grid-row: 2;
+
+    div {
+      @include layouts.flex;
+      align-items: center;
+      gap: 8px;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  .footerThird {
+    grid-column: 5 / span 1;
+    grid-row: 2;
+  }
+
+  .footerFourth {
+    grid-column: 6 / span 1;
+    grid-row: 2;
+  }
 }
 
-.footerThrid {
-  grid-column: 4 / span 1;
-  grid-row: 2;
-}
+@layer responsive {
+  .container {
+    padding: spacings.$spacing-m spacings.$spacing-xxxxl;
 
-.footerFourth {
-  grid-column: 5 / span 1;
-  grid-row: 2;
+    @media (max-width: responsive.$breakpoint-lg) {
+      padding: spacings.$spacing-xs;
+    }
+  }
+
+  .footerSecond {
+    @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 1 / span 5;
+    }
+  }
+
+  .footerFirst,
+  .footerThird,
+  .footerFourth {
+    @media (max-width: responsive.$breakpoint-lg) {
+      display: none;
+    }
+  }
 }

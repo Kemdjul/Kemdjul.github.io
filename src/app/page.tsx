@@ -3,15 +3,15 @@ import HomeCategories from "~/components/home/Categories/HomeCategories";
 import HomeCards from "~/components/home/Cards/HomeCards";
 import HomeDiscounts from "~/components/home/Discounts/HomeDiscounts";
 import HomeSuppliers from "~/components/home/Suppliers/HomeSuppliers";
-import { getAllProducts } from "~/utils/shopify";
+/* import { getAllProducts } from "~/utils/shopify"; */
 
 import * as motion from "motion/react-client";
 
 export default async function Home() {
-  const products = await getAllProducts(
+  /* const products = await getAllProducts(
     process.env.SHOP_URL ?? "",
     process.env.STOREFRONT_ACCESS_TOKEN ?? ""
-  );
+  ); */
 
   return (
     <motion.main

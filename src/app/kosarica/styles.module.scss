@@ -1,8 +1,20 @@
 @use "../../assets/css/grid";
 @use "../../assets/css/spacings";
+@use "../../assets/css/responsive";
 
-.container {
-  @include grid.grid;
-  align-items: flex-start;
-  margin: spacings.$spacing-xxxl spacings.$spacing-xxxxl;
+@layer _components {
+  .container {
+    @include grid.grid;
+    align-items: flex-start;
+  }
+}
+
+@layer responsive {
+  .container {
+    margin: spacings.$spacing-xxxl spacings.$spacing-xxxxl;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      margin: spacings.$spacing-xs;
+    }
+  }
 }

@@ -1,52 +1,79 @@
 @use "../../../assets/css/colors";
 @use "../../../assets/css/layouts";
+@use "../../../assets/css/responsive";
+@use "../../../assets/css/spacings";
 
-.container {
-  grid-column: 5 / span 4;
-  @include layouts.flex-col;
-  gap: 32px;
+@layer _components {
+  .checkoutProducts {
+    @include layouts.flex-col;
+  }
+
+  .checkoutProductItem {
+    @include layouts.flex-col;
+    gap: spacings.$spacing-xs;
+  }
+
+  .checkoutProductDesc {
+    @include layouts.flex-col;
+    gap: 16px;
+  }
+
+  .checkoutProductName {
+    @include layouts.flex-col;
+  }
+
+  .checkoutProductSelects {
+    @include layouts.flex-col;
+    gap: 8px;
+  }
+
+  .checkoutProductSelect {
+    @include layouts.flex-justify-between;
+  }
+
+  .checkoutProductLower {
+    @include layouts.flex-justify-between;
+  }
 }
 
-.checkoutProducts {
-  @include layouts.flex-col;
-  gap: 32px;
-}
+@layer responsive {
+  .container {
+    grid-column: 1 / span 5;
+    @include layouts.flex-col;
+    gap: spacings.$spacing-m;
 
-.checkoutProductItem {
-  @include layouts.flex-col;
-  gap: 16px;
-}
+    @media (max-width: responsive.$breakpoint-lg) {
+      gap: spacings.$spacing-xs;
+    }
+  }
 
-.checkoutProductUpper {
-  @include layouts.flex-justify-between;
-  align-items: flex-start;
-  gap: 16px;
-}
+  .checkout {
+    &Products {
+      gap: spacings.$spacing-m;
 
-.checkoutProductDesc {
-  @include layouts.flex-col;
-  gap: 16px;
-}
+      @media (max-width: responsive.$breakpoint-lg) {
+        gap: spacings.$spacing-xs;
+      }
+    }
 
-.checkoutProductName {
-  @include layouts.flex-col;
-}
+    &ProductUpper {
+      @include layouts.flex-justify-between;
+      align-items: flex-start;
+      gap: spacings.$spacing-xs;
 
-.checkoutProductSelects {
-  @include layouts.flex-col;
-  gap: 8px;
-}
+      @media (max-width: responsive.$breakpoint-lg) {
+        @include layouts.flex-col;
+      }
+    }
+  }
 
-.checkoutProductSelect {
-  @include layouts.flex-justify-between;
-}
+  .tempImage {
+    width: 240px;
+    height: 280px;
+    background-color: colors.$gray-200;
 
-.checkoutProductLower {
-  @include layouts.flex-justify-between;
-}
-
-.tempImage {
-  width: 240px;
-  height: 280px;
-  background-color: colors.$gray-200;
+    @media (max-width: responsive.$breakpoint-lg) {
+      width: 100%;
+    }
+  }
 }

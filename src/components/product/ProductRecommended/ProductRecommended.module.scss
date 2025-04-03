@@ -1,47 +1,59 @@
 @use "../../../assets/css/colors";
 @use "../../../assets/css/layouts";
+@use "../../../assets/css/responsive";
+@use "../../../assets/css/spacings";
 
-.container {
-  grid-column: 1 / span 8;
-  @include layouts.flex-col;
-  gap: 32px;
-  margin-top: 120px;
-}
+@layer _components {
+  .productItem {
+    @include layouts.flex-col;
+    gap: 8px;
+  }
 
-.productItem {
-  @include layouts.flex-col;
-  gap: 8px;
-}
+  .productItemPrice {
+    @include layouts.flex;
+    align-items: flex-end;
+    gap: 8px;
+  }
 
-.productItemPrice {
-  @include layouts.flex;
-  align-items: flex-end;
-  gap: 8px;
-}
+  .indicators {
+    @include layouts.flex-center;
+    gap: 8px;
+    margin: 32px 120px;
+  }
 
-.indicators {
-  @include layouts.flex-center;
-  gap: 8px;
-  margin: 32px 120px;
-}
+  .indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    border: 0;
+    background-color: colors.$gray-200;
+    transition: width 250ms ease;
 
-.indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  border: 0;
-  background-color: colors.$gray-200;
-  transition: width 250ms ease;
+    &[data-active] {
+      background-color: colors.$gray-600;
+      width: 24px;
+    }
+  }
 
-  &[data-active] {
-    background-color: colors.$gray-600;
-    width: 24px;
+  .tempImage {
+    width: 100%;
+    height: 320px;
+
+    background-color: colors.$gray-200;
   }
 }
 
-.tempImage {
-  width: 100%;
-  height: 320px;
+@layer responsive {
+  .container {
+    grid-column: 1 / span 8;
+    @include layouts.flex-col;
+    gap: spacings.$spacing-m;
+    margin-top: 120px;
 
-  background-color: colors.$gray-200;
+    @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 1 / span 5;
+      gap: spacings.$spacing-xs;
+      margin-top: 0;
+    }
+  }
 }

@@ -1,37 +1,63 @@
 @use "../../../assets/css/layouts";
 @use "../../../assets/css/colors";
+@use "../../../assets/css/responsive";
+@use "../../../assets/css/spacings";
 
-.container {
-  grid-column: 1 / span 4;
-  @include layouts.flex-col;
-  gap: 32px;
+@layer _components {
+  .form {
+    @include layouts.flex-col;
+  }
+
+  .formInputs {
+    @include layouts.flex-col;
+    gap: spacings.$spacing-xxs;
+  }
+
+  .formInputRoot {
+    width: 100%;
+  }
+
+  .formSubmit {
+    @include layouts.flex;
+    justify-content: flex-end;
+  }
 }
 
-.form {
-  @include layouts.flex-col;
-  gap: 32px;
-}
+@layer responsive {
+  .container {
+    grid-column: 1 / span 4;
+    @include layouts.flex-col;
+    gap: spacings.$spacing-m;
 
-.formInputs {
-  @include layouts.flex-col;
-  gap: 8px;
-}
+    @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 1 / span 5;
+      gap: spacings.$spacing-xs;
+    }
+  }
 
-.formName {
-  @include layouts.flex-justify-between;
-  gap: 16px;
-}
+  .form {
+    gap: spacings.$spacing-m;
 
-.formInputRoot {
-  width: 100%;
-}
+    @media (max-width: responsive.$breakpoint-lg) {
+      gap: spacings.$spacing-xs;
+    }
 
-.formRadio {
-  @include layouts.flex-justify-between;
-  gap: 32px;
-}
+    &Name,
+    &Radio {
+      @include layouts.flex-justify-between;
+      gap: spacings.$spacing-xs;
 
-.formSubmit {
-  @include layouts.flex;
-  justify-content: flex-end;
+      @media (max-width: responsive.$breakpoint-lg) {
+        @include layouts.flex-col;
+        align-items: flex-start;
+      }
+    }
+
+    &Submit button {
+      @media (max-width: responsive.$breakpoint-lg) {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
 }

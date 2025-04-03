@@ -107,9 +107,11 @@ const SidebarCart = ({ opened, close }: Props) => {
           </span>
 
           <span>
-            <Button>
-              <Text size={isMobile ? "h5" : "h4"}>Nastavi na plaćanje</Text>
-            </Button>
+            <Link href="/kosarica" className={styles.cartLink}>
+              <Button>
+                <Text size={isMobile ? "h5" : "h4"}>Nastavi na plaćanje</Text>
+              </Button>
+            </Link>
 
             <Link href="#">Pogledaj košaricu</Link>
           </span>

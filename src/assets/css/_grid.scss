@@ -1,4 +1,5 @@
 @use "./responsive";
+@use "./spacings";
 
 @mixin grid {
   display: grid;
@@ -8,7 +9,7 @@
 
   @media (max-width: responsive.$breakpoint-lg) {
     grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
+    gap: spacings.$spacing-m spacings.$spacing-xxs;
   }
 }
 
@@ -17,4 +18,13 @@
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 420px;
   gap: 24px;
+
+  @media (max-width: responsive.$breakpoint-lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: responsive.$breakpoint-sm) {
+    grid-template-columns: 1fr;
+    gap: spacings.$spacing-xxs;
+  }
 }

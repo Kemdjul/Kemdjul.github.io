@@ -1,7 +1,9 @@
 import NavLink from "~/components/global/NavLink/NavLink";
 import styles from "./Footer.module.scss";
 import Truck from "~/assets/svg/Truck";
+import HandMoney from "~/assets/svg/HandMoney";
 import { Text, Title } from "@mantine/core";
+import Return from "~/assets/svg/Return";
 
 const Footer = () => {
   return (
@@ -14,27 +16,27 @@ const Footer = () => {
       </div>
 
       <div className={`${styles.footerText} ${styles.footerFirst}`}>
-        <NavLink href="#">
+        <NavLink href="/">
           <Text size="p" td="underline">
             Naslovnica
           </Text>
         </NavLink>
-        <NavLink href="#">
+        <NavLink href="/trgovina">
           <Text size="p" td="underline">
             Trgovina
           </Text>
         </NavLink>
-        <NavLink href="#">
+        <NavLink href="/kontakt">
           <Text size="p" td="underline">
             Kontakt
           </Text>
         </NavLink>
-        <NavLink href="#">
+        <NavLink href="/o-nama">
           <Text size="p" td="underline">
             O nama
           </Text>{" "}
         </NavLink>
-        <NavLink href="#">
+        <NavLink href="/uvjeti-pruzanja-usluga-i-politika-o-privatnosti">
           <Text size="p" td="underline">
             Uvjeti pružanja usluge i politika o privatnosti
           </Text>{" "}
@@ -48,12 +50,12 @@ const Footer = () => {
         </div>
 
         <div>
-          <Truck />
+          <Return />
           <Title order={6}>Povratak sredstva nakon 21 dan</Title>
         </div>
 
         <div>
-          <Truck />
+          <HandMoney />
           <Title order={6}>Plaćanje pouzećem</Title>
         </div>
       </div>

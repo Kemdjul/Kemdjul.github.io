@@ -1,52 +1,88 @@
 @use "../../../assets/css/layouts";
 @use "../../../assets/css/colors";
+@use "../../../assets/css/responsive";
+@use "../../../assets/css/spacings";
 
-.container {
-  grid-column: 1 / span 4;
-  @include layouts.flex-col;
-  gap: 32px;
+@layer _components {
+  .container {
+    @include layouts.flex-col;
+  }
+
+  .cartProducts {
+    @include layouts.flex-col;
+  }
+
+  .cartProductItem {
+    @include layouts.flex-col;
+    gap: spacings.$spacing-m;
+  }
+
+  .cartProductDesc {
+    @include layouts.flex-col;
+    gap: 16px;
+  }
+
+  .cartProductName {
+    @include layouts.flex-col;
+  }
+
+  .cartProductSelects {
+    @include layouts.flex-col;
+    gap: 8px;
+  }
+
+  .cartProductSelect {
+    @include layouts.flex-justify-between;
+  }
+
+  .cartProductLower {
+    @include layouts.flex-justify-between;
+  }
 }
 
-.cartProducts {
-  @include layouts.flex-col;
-  gap: 32px;
-}
+@layer responsive {
+  .container {
+    grid-column: 1 / span 4;
+    gap: spacings.$spacing-m;
 
-.cartProductItem {
-  @include layouts.flex-col;
-  gap: 16px;
-}
+    @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 1 / span 5;
+      gap: spacings.$spacing-xs;
+    }
+  }
 
-.cartProductUpper {
-  @include layouts.flex-justify-between;
-  align-items: flex-start;
-  gap: 16px;
-}
+  .cart {
+    &Products {
+      gap: spacings.$spacing-m;
+      @media (max-width: responsive.$breakpoint-lg) {
+        gap: spacings.$spacing-xs;
+      }
+    }
 
-.cartProductDesc {
-  @include layouts.flex-col;
-  gap: 16px;
-}
+    &ProductUpper {
+      @include layouts.flex-justify-between;
+      align-items: flex-start;
+      gap: spacings.$spacing-xs;
 
-.cartProductName {
-  @include layouts.flex-col;
-}
+      @media (max-width: responsive.$breakpoint-lg) {
+        @include layouts.flex-col;
+      }
+    }
+  }
 
-.cartProductSelects {
-  @include layouts.flex-col;
-  gap: 8px;
-}
+  .tempImage {
+    width: 240px;
+    height: 280px;
+    background-color: colors.$gray-200;
 
-.cartProductSelect {
-  @include layouts.flex-justify-between;
-}
+    @media (max-width: responsive.$breakpoint-lg) {
+      width: 100%;
+    }
+  }
 
-.cartProductLower {
-  @include layouts.flex-justify-between;
-}
-
-.tempImage {
-  width: 240px;
-  height: 280px;
-  background-color: colors.$gray-200;
+  .hidden {
+    @media (max-width: responsive.$breakpoint-lg) {
+      display: none;
+    }
+  }
 }

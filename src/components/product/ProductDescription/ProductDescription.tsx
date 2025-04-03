@@ -1,15 +1,31 @@
 "use client";
-import { Breadcrumbs, Anchor, Card, Select, Title, Text } from "@mantine/core";
+import {
+  Breadcrumbs,
+  Anchor,
+  Card,
+  Select,
+  Title,
+  Text,
+  em,
+} from "@mantine/core";
 import Link from "next/link";
 import ArrowDown from "~/assets/svg/ArrowDown";
 import Button from "~/components/global/Button/Button";
 import styles from "./ProductDescription.module.scss";
+import { useMediaQuery } from "@mantine/hooks";
+import { breakpoints } from "~/utils/breakpoints";
 
 const ProductDescription = () => {
+  const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+
   const items = [
     { title: "Trgovina", href: "#" },
     { title: "Duksa", href: "#" },
-  ];
+  ].map((item, index) => (
+    <Anchor href={item.href} key={index}>
+      <Text size={isMobile ? "p" : "caption"}>{item.title}</Text>
+    </Anchor>
+  ));
 
   const colorSelectData = ["Crvena", "Zelena", "Žuta", "Crna"];
   const sizeSelectData = ["M", "L", "XL", "XXL", "XXXL", "XXXXL"];
@@ -17,18 +33,12 @@ const ProductDescription = () => {
   return (
     <section className={styles.container}>
       <div>
-        <Breadcrumbs>
-          {items.map((item, index) => (
-            <Anchor href={item.href} key={index}>
-              {item.title}
-            </Anchor>
-          ))}
-        </Breadcrumbs>
+        <Breadcrumbs>{items}</Breadcrumbs>
         <span className={styles.productTitle}>
-          <Title order={3} fw={"700"}>
+          <Title order={3} size={isMobile ? "h5" : "h3"} fw={"700"}>
             Dukse s kapuljačom
           </Title>
-          <Title order={5} c={"#26733A"}>
+          <Title order={5} size={isMobile ? "p" : "h5"} c={"#26733A"}>
             Dostupno
           </Title>
         </span>
@@ -59,29 +69,42 @@ const ProductDescription = () => {
           </div>
 
           <Link href="#">
-            <Text size="p">Vodič za veličine</Text>
+            <Text size={isMobile ? "caption" : "p"}>Vodič za veličine</Text>
           </Link>
         </div>
       </div>
 
       <div className={styles.productCards}>
         <Card padding="md" shadow="md" className={styles.productCard}>
-          <Title order={5}>Opis o proizvodu</Title>
+          <Title size={isMobile ? "h6" : "h5"} order={5}>
+            Opis o proizvodu
+          </Title>
           <ArrowDown />
         </Card>
 
         <Card padding="md" shadow="md" className={styles.productCard}>
-          <Title order={5}>Sastav</Title>
+          <Title size={isMobile ? "h6" : "h5"} order={5}>
+            Sastav
+          </Title>
           <ArrowDown />
         </Card>
       </div>
 
       <div className={styles.productCTA}>
         <span className={styles.productPrices}>
-          <Title order={5} c="#666666" td="line-through">
+          <Title
+            order={5}
+            size={isMobile ? "h6" : "h5"}
+            c="#666666"
+            td="line-through"
+          >
             99.99€
           </Title>
-          <Title order={4} fw={700}>
+          <Title
+            order={4}
+            size={isMobile ? "h5" : "h4"}
+            fw={isMobile ? 500 : 700}
+          >
             99.99€
           </Title>
         </span>

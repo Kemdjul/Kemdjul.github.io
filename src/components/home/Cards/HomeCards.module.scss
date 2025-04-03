@@ -8,13 +8,11 @@
 
   .categoriesCard {
     align-items: stretch;
-    flex: 1;
 
     &Text {
       @include layouts.flex-col-justify-between;
       align-items: flex-start;
       gap: 8px;
-      flex: 1;
     }
   }
 }
@@ -23,6 +21,8 @@
   .categoriesContainer {
     @include layouts.flex-justify-between;
     margin: 32px 200px;
+    gap: 16px;
+    align-items: stretch;
 
     @media (max-width: responsive.$breakpoint-lg) {
       @include layouts.flex-col;
@@ -33,6 +33,7 @@
 
   .categoriesCard {
     @include layouts.flex-col;
+    height: 100%;
     gap: 16px;
 
     @media (max-width: responsive.$breakpoint-lg) {

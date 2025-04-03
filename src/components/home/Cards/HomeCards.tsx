@@ -29,7 +29,9 @@ const HomeCards = () => {
           shadow="md"
           className={styles.categoriesCard}
         >
-          <Truck />
+          <span>
+            <Truck />
+          </span>
 
           <div className={styles.categoriesCardText}>
             <Title
@@ -62,8 +64,9 @@ const HomeCards = () => {
           shadow="md"
           className={styles.categoriesCard}
         >
-          <Euro />
-
+          <span>
+            <Euro />
+          </span>
           <div className={styles.categoriesCardText}>
             <Title
               order={4}
@@ -95,8 +98,9 @@ const HomeCards = () => {
           shadow="md"
           className={styles.categoriesCard}
         >
-          <Box />
-
+          <span>
+            <Box />
+          </span>
           <div className={styles.categoriesCardText}>
             <Title
               order={4}

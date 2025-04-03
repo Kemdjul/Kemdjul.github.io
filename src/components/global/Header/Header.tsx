@@ -5,8 +5,8 @@ import NavLink from "../NavLink/NavLink";
 import Button from "../Button/Button";
 import SearchForm from "../SearchForm/SearchForm";
 import SidebarCart from "./SidebarCart";
-import { Burger, Title } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Burger, em, Title } from "@mantine/core";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { slideDown, fillFromLeft } from "~/utils/animations";
 import styles from "./Header.module.scss";
 
@@ -14,11 +14,13 @@ import Cart from "~/assets/svg/Cart";
 import Search from "~/assets/svg/Search";
 import * as motion from "motion/react-client";
 import Close from "~/assets/svg/Close";
+import { breakpoints } from "~/utils/breakpoints";
 
 const Header = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
 
   return (
     <>
@@ -82,7 +84,9 @@ const Header = () => {
 
               {/* Icons */}
               <div className={styles.headerIcons}>
-                <span className={styles.headerIcon}>
+                <span
+                  className={`${styles.headerIcon} ${styles.headerIconSearch}`}
+                >
                   <Button
                     onClick={() => setShowSearch(true)}
                     className={styles.headerIconButton}
@@ -106,6 +110,7 @@ const Header = () => {
                   <Burger
                     opened={openMenu}
                     onClick={() => setOpenMenu(!openMenu)}
+                    size={isMobile ? "sm" : "md"}
                     color="white"
                   />
                 </span>

@@ -1,14 +1,26 @@
 "use client";
-import { Card, RangeSlider, Title } from "@mantine/core";
+import { Card, em, RangeSlider, Title } from "@mantine/core";
 import styles from "./ShopFilters.module.scss";
 import ArrowUp from "~/assets/svg/ArrowUp";
 import Button from "~/components/global/Button/Button";
 
 import { CheckboxGroup, Checkbox } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import { breakpoints } from "~/utils/breakpoints";
 
 const ShopFilters = () => {
+  const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+
   return (
     <section className={styles.filtersContainer}>
+      {isMobile && (
+        <div className={styles.filtersMobileTitle}>
+          <Button>
+            <p>Gotovo</p>
+          </Button>
+        </div>
+      )}
+
       <Card padding="sm" className={styles.filtersCard}>
         <span className={styles.filtersTitle}>
           <Title order={5}>Kategorije</Title>

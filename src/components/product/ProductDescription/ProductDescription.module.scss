@@ -1,52 +1,76 @@
 @use "../../../assets/css/layouts";
+@use "../../../assets/css/spacings";
+@use "../../../assets/css/responsive";
 
-.container {
-  grid-column: 6 / span 3;
-  @include layouts.flex-col;
-  gap: 32px;
-}
+@layer _components {
+  .productTitle {
+    @include layouts.flex-col;
+    gap: 8px;
+  }
 
-.productTitle {
-  @include layouts.flex-col;
-  gap: 8px;
-}
+  .productSelects {
+    @include layouts.flex-col;
+    gap: 8px;
+  }
 
-.productSelects {
-  @include layouts.flex-col;
-  gap: 8px;
-}
+  .productSelectContainer {
+    @include layouts.flex-justify-between;
+  }
 
-.productSelectContainer {
-  @include layouts.flex-justify-between;
-}
+  .productSelect {
+    @include layouts.flex-col;
+    align-items: flex-end;
+  }
 
-.productSelect {
-  @include layouts.flex-col;
-  align-items: flex-end;
-}
+  .productSelectWithGuide {
+    @include layouts.flex-justify-between;
+    width: 100%;
+  }
 
-.productSelectWithGuide {
-  @include layouts.flex-justify-between;
-  width: 100%;
-}
+  .productCards {
+    @include layouts.flex-col;
+    gap: 8px;
+  }
 
-.productCards {
-  @include layouts.flex-col;
-  gap: 8px;
-}
-
-.productCard {
-  @include layouts.flex-justify-between;
-  svg {
-    width: 28px;
-    height: 28px;
+  .productCard {
+    @include layouts.flex-justify-between;
+    svg {
+      width: 28px;
+      height: 28px;
+    }
   }
 }
 
-.productCTA {
-  @include layouts.flex-justify-between;
-}
+@layer responsive {
+  .container {
+    grid-column: 6 / span 3;
+    @include layouts.flex-col;
+    gap: 32px;
 
-.productPrices {
-  @include layouts.flex-col;
+    @media (max-width: responsive.$breakpoint-lg) {
+      grid-column: 1 / span 5;
+    }
+  }
+
+  .product {
+    &CTA {
+      @include layouts.flex-justify-between;
+
+      @media (max-width: responsive.$breakpoint-lg) {
+        @include layouts.flex-col;
+        align-items: flex-start;
+        gap: spacings.$spacing-xxs;
+      }
+    }
+
+    &Prices {
+      @include layouts.flex-col;
+
+      @media (max-width: responsive.$breakpoint-lg) {
+        flex-direction: row-reverse;
+        align-items: flex-end;
+        gap: spacings.$spacing-xxs;
+      }
+    }
+  }
 }
