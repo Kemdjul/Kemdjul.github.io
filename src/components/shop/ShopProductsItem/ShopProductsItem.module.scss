@@ -1,0 +1,40 @@
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/grid";
+@use "../../../assets/css/colors";
+@use "../../../assets/css/spacings";
+@use "../../../assets/css/responsive";
+
+@layer _components {
+  .products {
+    &Item {
+      @include layouts.flex-col;
+      width: 100%;
+      gap: 16px;
+    }
+
+    &Price {
+      @include layouts.flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &ItemTitle {
+      @include layouts.flex-col;
+      gap: 8px;
+      color: colors.$gray-600;
+    }
+
+    &PreviousPrice {
+      text-decoration: line-through;
+    }
+  }
+
+  .productsItemsImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+@layer responsive {
+}

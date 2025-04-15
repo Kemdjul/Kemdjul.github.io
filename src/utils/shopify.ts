@@ -1,6 +1,11 @@
 import { gql, GraphQLClient } from "graphql-request";
 
-export async function getAllProducts(endpoint: string, token: string) {
+export async function getAllProducts(
+  endpoint: string | undefined,
+  token: string | undefined
+) {
+  if (!token || !endpoint) return;
+
   const graphQLClient = new GraphQLClient(endpoint, {
     headers: {
       "X-Shopify-Storefront-Access-Token": token,
@@ -9,12 +14,16 @@ export async function getAllProducts(endpoint: string, token: string) {
 
   const getAllProductsQuery = gql`
     {
-      products(first: 10) {
+      products(first: 250) {
         edges {
           node {
             id
             title
             handle
+            category {
+              id
+              name
+            }
             priceRange {
               minVariantPrice {
                 amount
@@ -23,6 +32,14 @@ export async function getAllProducts(endpoint: string, token: string) {
             featuredImage {
               altText
               url
+            }
+            options {
+              id
+              name
+              optionValues {
+                id
+                name
+              }
             }
           }
         }

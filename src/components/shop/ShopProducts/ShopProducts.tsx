@@ -1,15 +1,19 @@
 "use client";
 import { Breadcrumbs, Anchor, Select, Title, em, Text } from "@mantine/core";
-import Link from "next/link";
-import styles from "./ShopProducts.module.scss";
+import ShopProductsItem from "../ShopProductsItem/ShopProductsItem";
 import Button from "~/components/global/Button/Button";
 import Filter from "~/assets/svg/Filter";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
-import Image from "next/image";
+import { useAppSelector } from "~/store/hooks";
+import { selectAllFilters } from "~/store/features/shop/filtersSlice";
+import styles from "./ShopProducts.module.scss";
 
 const ShopProducts = ({ products }) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+  const allFilters = useAppSelector(selectAllFilters);
+
+  console.log(products);
 
   const breadcrumbsItems = [
     { title: "Naslovnica", href: "/" },
@@ -20,7 +24,36 @@ const ShopProducts = ({ products }) => {
     </Anchor>
   ));
 
-  console.log(products[0].node);
+  const checkCategory = (product) => {
+    return (
+      !allFilters.category.length ||
+      allFilters.category.includes(product.node.category.name)
+    );
+  };
+
+  const checkSize = (product) => {
+    return (
+      !allFilters.size.length ||
+      product.node.options[1].optionValues.some((item) =>
+        allFilters.size.includes(item.name)
+      )
+    );
+  };
+
+  const checkColor = (product) => {
+    return (
+      !allFilters.color.length ||
+      product.node.options[0].optionValues.some((item) =>
+        allFilters.color.includes(item.name)
+      )
+    );
+  };
+
+  const checkIfFiltered = (product) => {
+    if (checkCategory(product) && checkSize(product) && checkColor(product))
+      return true;
+    return false;
+  };
 
   return (
     <section className={styles.productsContainer}>
@@ -61,37 +94,11 @@ const ShopProducts = ({ products }) => {
       </div>
 
       <div className={styles.productsItemsContainer}>
-        {products?.map((product) => (
-          <Link
-            key={product.node.id}
-            href={`/trgovina/${product.node.id.split("/")[4]}`}
-            className={styles.productsItem}
-            style={{ textDecoration: "none" }}
-          >
-            <Image
-              loader={() => product.node.featuredImage.url}
-              src={product.node.featuredImage.url}
-              width={320}
-              height={360}
-              alt={product.node.featuredImage.alt}
-              className={styles.productsItemsImage}
-            />
-
-            <div className={styles.productsItemTitle}>
-              <Title order={6} fw={700}>
-                {product.node.title}
-              </Title>
-              <span className={styles.productsPrice}>
-                <Title order={5}>
-                  {product.node.priceRange.minVariantPrice.amount}€
-                </Title>
-                <Title order={6} td="line-through">
-                  109.99€
-                </Title>
-              </span>
-            </div>
-          </Link>
-        ))}
+        {products?.map((product) => {
+          if (checkIfFiltered(product))
+            return <ShopProductsItem product={product} key={product.id} />;
+          return "";
+        })}
       </div>
     </section>
   );

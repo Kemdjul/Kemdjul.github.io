@@ -25,6 +25,7 @@
     }
 
     &CategoriesButton {
+      cursor: pointer;
       border: 0;
     }
 
@@ -56,6 +57,10 @@
       align-items: flex-end;
       padding-bottom: spacings.$spacing-xxs;
     }
+  }
+
+  .active {
+    text-decoration: underline;
   }
 }
 

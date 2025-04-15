@@ -16,8 +16,6 @@ const page: {
     `gid://shopify/Product/${params.slug}`
   );
 
-  console.log(product);
-
   return (
     <motion.main
       className={styles.container}

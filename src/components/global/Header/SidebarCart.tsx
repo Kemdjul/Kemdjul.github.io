@@ -28,8 +28,6 @@ const SidebarCart = ({ opened, close }: Props) => {
   const totalPrice = useAppSelector(selectCartTotal);
   const dispatch = useAppDispatch();
 
-  console.log(items);
-
   const onDeleteClick = (product) => {
     dispatch(
       removeItem({ id: product.id, size: product.size, color: product.color })

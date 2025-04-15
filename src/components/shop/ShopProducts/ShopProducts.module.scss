@@ -15,31 +15,9 @@
       @include grid.gridProducts;
     }
 
-    &Item {
-      @include layouts.flex-col;
-      width: 100%;
-      gap: 16px;
-    }
-
     &Title {
       @include layouts.flex-justify-between;
       align-items: flex-start;
-    }
-
-    &Price {
-      @include layouts.flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    &ItemTitle {
-      @include layouts.flex-col;
-      gap: 8px;
-      color: colors.$gray-600;
-    }
-
-    &PreviousPrice {
-      text-decoration: line-through;
     }
   }
 
@@ -47,12 +25,6 @@
     @include layouts.flex;
     align-items: center;
     gap: 8px;
-  }
-
-  .productsItemsImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 }
 
