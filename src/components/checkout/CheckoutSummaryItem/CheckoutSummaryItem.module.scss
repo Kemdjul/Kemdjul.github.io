@@ -1,0 +1,56 @@
+@use "../../../assets/css/colors";
+@use "../../../assets/css/layouts";
+@use "../../../assets/css/responsive";
+@use "../../../assets/css/spacings";
+
+@layer _components {
+  .checkoutProductItem {
+    @include layouts.flex-col;
+    gap: spacings.$spacing-xs;
+  }
+
+  .checkoutProductDesc {
+    @include layouts.flex-col;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .checkoutProductName {
+    @include layouts.flex-col;
+  }
+
+  .checkoutProductSelects {
+    @include layouts.flex-col;
+    gap: 8px;
+  }
+
+  .checkoutProductSelect {
+    @include layouts.flex-justify-between;
+  }
+
+  .checkoutProductLower {
+    @include layouts.flex-justify-between;
+  }
+}
+
+@layer responsive {
+  .checkoutProductUpper {
+    @include layouts.flex-justify-between;
+    align-items: flex-start;
+    gap: spacings.$spacing-xs;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      @include layouts.flex-col;
+    }
+  }
+
+  .productImage {
+    width: 240px;
+    height: 280px;
+    object-fit: cover;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      width: 100%;
+    }
+  }
+}

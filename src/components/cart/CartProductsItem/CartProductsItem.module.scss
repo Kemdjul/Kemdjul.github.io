@@ -1,22 +1,8 @@
 @use "../../../assets/css/layouts";
-@use "../../../assets/css/colors";
 @use "../../../assets/css/responsive";
 @use "../../../assets/css/spacings";
 
 @layer _components {
-  .container {
-    @include layouts.flex-col;
-  }
-
-  .cartProducts {
-    @include layouts.flex-col;
-  }
-
-  .cartProductItem {
-    @include layouts.flex-col;
-    gap: spacings.$spacing-m;
-  }
-
   .cartProductDesc {
     @include layouts.flex-col;
     gap: 16px;
@@ -41,28 +27,28 @@
 }
 
 @layer responsive {
-  .container {
-    grid-column: 1 / span 4;
+  .productImage {
+    width: 240px;
+    height: 280px;
+    object-fit: cover;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      width: 100%;
+    }
+  }
+
+  .cartProductUpper {
+    @include layouts.flex-justify-between;
+    align-items: flex-start;
+    gap: spacings.$spacing-xs;
+
+    @media (max-width: responsive.$breakpoint-lg) {
+      @include layouts.flex-col;
+    }
+  }
+
+  .cartProductItem {
+    @include layouts.flex-col;
     gap: spacings.$spacing-m;
-
-    @media (max-width: responsive.$breakpoint-lg) {
-      grid-column: 1 / span 5;
-      gap: spacings.$spacing-xs;
-    }
-  }
-
-  .cart {
-    &Products {
-      gap: spacings.$spacing-m;
-      @media (max-width: responsive.$breakpoint-lg) {
-        gap: spacings.$spacing-xs;
-      }
-    }
-  }
-
-  .hidden {
-    @media (max-width: responsive.$breakpoint-lg) {
-      display: none;
-    }
   }
 }

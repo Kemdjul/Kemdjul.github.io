@@ -28,6 +28,8 @@ const SidebarCart = ({ opened, close }: Props) => {
   const totalPrice = useAppSelector(selectCartTotal);
   const dispatch = useAppDispatch();
 
+  console.log(items);
+
   const onDeleteClick = (product) => {
     dispatch(
       removeItem({ id: product.id, size: product.size, color: product.color })
@@ -116,13 +118,19 @@ const SidebarCart = ({ opened, close }: Props) => {
           </span>
 
           <span>
-            <Link href="/kosarica" className={styles.cartLink}>
-              <Button>
+            {items.length ? (
+              <Link href="/pregled" className={styles.cartLink}>
+                <Button>
+                  <Text size={isMobile ? "h5" : "h4"}>Nastavi na plaćanje</Text>
+                </Button>
+              </Link>
+            ) : (
+              <Button disabled>
                 <Text size={isMobile ? "h5" : "h4"}>Nastavi na plaćanje</Text>
               </Button>
-            </Link>
+            )}
 
-            <Link href="#">Pogledaj košaricu</Link>
+            <Link href="/kosarica">Pogledaj košaricu</Link>
           </span>
         </div>
       </div>

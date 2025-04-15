@@ -25,16 +25,22 @@ const CartSummary = () => {
       <div className={styles.summaryPrice}>
         <span>
           <Title order={4} size={isMobile ? "h6" : "h4"} fw={700}>
-            Ukupno: {totalPrice + 2}€
+            Ukupno: {totalPrice ? totalPrice + 2 : "0"}€
           </Title>
           <Text size={isMobile ? "p" : "h6"}>Troškovi dostave: 2.00€</Text>
         </span>
 
-        <Link href="/pregled" style={{ textDecoration: "none" }}>
-          <Button onClick={() => {}}>
+        {totalPrice ? (
+          <Link href="/pregled" style={{ textDecoration: "none" }}>
+            <Button>
+              <Text size="h5">Nastavi na plaćanje</Text>
+            </Button>
+          </Link>
+        ) : (
+          <Button disabled>
             <Text size="h5">Nastavi na plaćanje</Text>
           </Button>
-        </Link>
+        )}
       </div>
 
       <Separator />

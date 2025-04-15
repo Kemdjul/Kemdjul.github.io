@@ -6,9 +6,12 @@ import Button from "~/components/global/Button/Button";
 import Separator from "~/components/global/Separator/Separator";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
+import { useAppSelector } from "~/store/hooks";
+import { selectCartItems } from "~/store/features/cart/cartSlice";
 
 const CheckoutForm = () => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+  const items = useAppSelector(selectCartItems);
 
   return (
     <section className={styles.container}>
@@ -48,7 +51,7 @@ const CheckoutForm = () => {
         </span>
 
         <span className={styles.formSubmit}>
-          <Button type="submit">
+          <Button type="submit" disabled={!items.length}>
             <Text size="h5">Završi narudžbu</Text>
           </Button>
         </span>
