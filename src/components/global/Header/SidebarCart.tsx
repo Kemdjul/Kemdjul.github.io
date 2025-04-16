@@ -117,7 +117,11 @@ const SidebarCart = ({ opened, close }: Props) => {
 
           <span>
             {items.length ? (
-              <Link href="/pregled" className={styles.cartLink}>
+              <Link
+                href="/pregled"
+                className={styles.cartLink}
+                onClick={() => close()}
+              >
                 <Button>
                   <Text size={isMobile ? "h5" : "h4"}>Nastavi na plaćanje</Text>
                 </Button>
@@ -128,7 +132,9 @@ const SidebarCart = ({ opened, close }: Props) => {
               </Button>
             )}
 
-            <Link href="/kosarica">Pogledaj košaricu</Link>
+            <Link href="/kosarica" onClick={() => close()}>
+              Pogledaj košaricu
+            </Link>
           </span>
         </div>
       </div>

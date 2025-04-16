@@ -45,6 +45,7 @@
     &Name,
     &Radio {
       @include layouts.flex-justify-between;
+      align-items: flex-start;
       gap: spacings.$spacing-xs;
 
       @media (max-width: responsive.$breakpoint-lg) {
