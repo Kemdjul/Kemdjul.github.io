@@ -1,3 +1,4 @@
+"use server";
 import { gql, GraphQLClient } from "graphql-request";
 
 export async function getAllProducts(
@@ -102,6 +103,18 @@ export const getProduct = async (
           optionValues {
             id
             name
+          }
+        }
+        variants(first: 10) {
+          edges {
+            node {
+              availableForSale
+              id
+              selectedOptions {
+                name
+                value
+              }
+            }
           }
         }
       }

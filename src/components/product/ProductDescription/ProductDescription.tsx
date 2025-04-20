@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "~/store/hooks";
 import { addItem, selectCartItems } from "~/store/features/cart/cartSlice";
 import { useState } from "react";
 
-const ProductDescription = ({ product }) => {
+const ProductDescription = ({ product, addProductToCart }) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
   const dispatch = useAppDispatch();
   const cart = useAppSelector(selectCartItems);
@@ -25,10 +25,28 @@ const ProductDescription = ({ product }) => {
     (value) => value.name
   );
 
-  const addToCartAction = () => {
+  const onAddToCartClick = async () => {
     if (!color || !size) return;
 
-    dispatch(addItem({ ...product, amount: 1, color: color, size: size }));
+    try {
+      const selectedProductIndex = product.variants.edges.findIndex(
+        (item) =>
+          item.node.selectedOptions[0].value === color &&
+          item.node.selectedOptions[1].value === size
+      );
+      const addToCartAction = await addProductToCart(
+        product.variants.edges[selectedProductIndex].node.id,
+        size,
+        color
+      );
+      if (addToCartAction) {
+        dispatch(addItem({ ...product }));
+        localStorage.setItem("cartId", addToCartAction.cartCreate.cart.id);
+      }
+      console.log(addToCartAction);
+    } catch (err) {
+      throw new Error(err);
+    }
   };
 
   const alreadyInCart = cart.some(
@@ -132,7 +150,7 @@ const ProductDescription = ({ product }) => {
         </span>
 
         <Button
-          onClick={() => addToCartAction()}
+          onClick={() => onAddToCartClick()}
           disabled={alreadyInCart || !size || !color}
         >
           {alreadyInCart ? "Već u košarici" : "Dodaj u košaricu"}

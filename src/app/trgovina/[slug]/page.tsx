@@ -4,18 +4,32 @@ import ProductRecommended from "~/components/product/ProductRecommended/ProductR
 import styles from "./styles.module.scss";
 
 import * as motion from "motion/react-client";
-import { getProduct } from "~/utils/shopify";
+import { addToCart, getProduct } from "~/utils/shopify";
 
 const page: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-} = async ({ params, searchParams }) => {
+} = async ({ params }) => {
   const product = await getProduct(
     process.env.SHOPIFY_ENDPOINT,
     process.env.SHOPIFY_API_TOKEN,
     `gid://shopify/Product/${params.slug}`
   );
 
+  const addProductToCart = async (id: string) => {
+    "use server";
+    try {
+      const result = addToCart(
+        process.env.SHOPIFY_ENDPOINT,
+        process.env.SHOPIFY_API_TOKEN,
+        id,
+        1
+      );
+      console.log("Success", result);
+      return result;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
   return (
     <motion.main
       className={styles.container}
@@ -27,7 +41,10 @@ const page: {
       layout
     >
       <ProductGallery product={product} />
-      <ProductDescription product={product} />
+      <ProductDescription
+        product={product}
+        addProductToCart={addProductToCart}
+      />
       <ProductRecommended />
     </motion.main>
   );
