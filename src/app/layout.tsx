@@ -11,7 +11,7 @@ import "~/assets/css/index.scss";
 import "@mantine/core/styles.layer.css";
 import "@mantine/carousel/styles.layer.css";
 
-import Header from "~/components/global/Header/Header";
+import HeaderServer from "~/components/global/Header/HeaderServer";
 import Footer from "~/components/global/Footer/Footer";
 import { breakpoints } from "~/utils/breakpoints";
 import StoreProvider from "./StoreProvider";
@@ -22,19 +22,6 @@ const outfitSans = Outfit({
   variable: "--font-outift",
   subsets: ["latin"],
 });
-
-interface MantineTheme {
-  /** Class added to the elements that have focus styles, for example, `Button` or `ActionIcon`.
-   *  Overrides `theme.focusRing` property.
-   */
-  focusClassName: string;
-
-  /** Allows adding `classNames`, `styles` and `defaultProps` to any component */
-  components: MantineThemeComponents;
-
-  /** Any other properties that you want to access with the theme objects */
-  other: MantineThemeOther;
-}
 
 const theme = createTheme({
   fontFamily: outfitSans.style.fontFamily,
@@ -153,10 +140,11 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
+
       <body>
         <StoreProvider>
           <MantineProvider theme={theme}>
-            <Header />
+            <HeaderServer />
             {children}
             <Footer />
           </MantineProvider>

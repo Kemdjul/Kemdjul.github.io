@@ -3,14 +3,14 @@ import Link from "next/link";
 import styles from "./NavLink.module.scss";
 import { usePathname } from "next/navigation";
 
-type Props = {
+interface Props {
   children: React.ReactNode;
   href: string;
   replace?: boolean;
   scroll?: boolean;
   prefetch?: boolean;
   shallow?: boolean;
-};
+}
 
 const NavLink = ({
   children,

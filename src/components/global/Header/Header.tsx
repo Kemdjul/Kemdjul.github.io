@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import NavLink from "../NavLink/NavLink";
 import Button from "../Button/Button";
@@ -10,17 +10,39 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { slideDown, fillFromLeft } from "~/utils/animations";
 import styles from "./Header.module.scss";
 
-import Cart from "~/assets/svg/Cart";
+import CartIcon from "~/assets/svg/Cart";
 import Search from "~/assets/svg/Search";
 import * as motion from "motion/react-client";
 import Close from "~/assets/svg/Close";
 import { breakpoints } from "~/utils/breakpoints";
+import { Cart } from "~/types/cart";
 
-const Header = () => {
+interface Props {
+  fetchCartProducts: (cartId: string) => Promise<Cart>;
+}
+
+const Header = ({ fetchCartProducts }: Props) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+  const [cart, setCart] = useState<Cart>();
+  const cartId = localStorage.getItem("cartId") ?? "";
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const res = await fetchCartProducts(cartId);
+        console.log(res);
+        setCart(await res);
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    };
+
+    fetch();
+  }, [fetchCartProducts, cartId]);
 
   return (
     <>
@@ -102,7 +124,7 @@ const Header = () => {
                     className={styles.headerIconButton}
                     includeStyles={false}
                   >
-                    <Cart />
+                    <CartIcon />
                   </Button>
                 </span>
 
@@ -134,7 +156,7 @@ const Header = () => {
         </motion.div>
       </header>
 
-      <SidebarCart opened={opened} close={close} />
+      <SidebarCart opened={opened} close={close} cart={cart} />
     </>
   );
 };

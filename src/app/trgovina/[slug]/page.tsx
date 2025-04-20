@@ -4,30 +4,50 @@ import ProductRecommended from "~/components/product/ProductRecommended/ProductR
 import styles from "./styles.module.scss";
 
 import * as motion from "motion/react-client";
-import { addToCart, getProduct } from "~/utils/shopify";
+import { addToCart, getProduct, updateCart } from "~/utils/shopify";
+import { Product } from "~/types/products";
+import { Cart } from "~/types/cart";
 
-const page: {
-  params: Promise<{ slug: string }>;
-} = async ({ params }) => {
-  const product = await getProduct(
-    process.env.SHOPIFY_ENDPOINT,
-    process.env.SHOPIFY_API_TOKEN,
+interface Props {
+  params: {
+    slug: string;
+  };
+}
+
+const page = async ({ params }: Props) => {
+  const product: Product = await getProduct(
+    process.env.SHOPIFY_ENDPOINT ?? "",
+    process.env.SHOPIFY_API_TOKEN ?? "",
     `gid://shopify/Product/${params.slug}`
   );
 
-  const addProductToCart = async (id: string) => {
+  const addProductToCart = async (
+    id: string,
+    cartId: string
+  ): Promise<Cart> => {
     "use server";
     try {
-      const result = addToCart(
-        process.env.SHOPIFY_ENDPOINT,
-        process.env.SHOPIFY_API_TOKEN,
-        id,
-        1
-      );
-      console.log("Success", result);
-      return result;
+      if (cartId) {
+        const result = updateCart(
+          process.env.SHOPIFY_ENDPOINT ?? "",
+          process.env.SHOPIFY_API_TOKEN ?? "",
+          cartId,
+          id,
+          "1"
+        );
+        return result;
+      } else {
+        const result = addToCart(
+          process.env.SHOPIFY_ENDPOINT ?? "",
+          process.env.SHOPIFY_API_TOKEN ?? "",
+          id,
+          "1"
+        );
+        return result;
+      }
     } catch (err) {
-      throw new Error(err);
+      if (typeof err === "string") throw new Error(err);
+      throw err;
     }
   };
   return (

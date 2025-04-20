@@ -1,5 +1,13 @@
 "use client";
-import { Breadcrumbs, Anchor, Select, Title, Text, em } from "@mantine/core";
+import {
+  Breadcrumbs,
+  Anchor,
+  Select,
+  Title,
+  Text,
+  em,
+  ComboboxData,
+} from "@mantine/core";
 import Link from "next/link";
 import Button from "~/components/global/Button/Button";
 import styles from "./ProductDescription.module.scss";
@@ -9,48 +17,55 @@ import ProductDescriptionCard from "./ProductDescriptionCard/ProductDescriptionC
 import { useAppDispatch, useAppSelector } from "~/store/hooks";
 import { addItem, selectCartItems } from "~/store/features/cart/cartSlice";
 import { useState } from "react";
+import { Product } from "~/types/products";
+import { Cart } from "~/types/cart";
 
-const ProductDescription = ({ product, addProductToCart }) => {
+interface Props {
+  product: Product;
+  addProductToCart: (id: string, cartId: string) => Promise<Cart>;
+}
+
+const ProductDescription = ({ product, addProductToCart }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
   const dispatch = useAppDispatch();
   const cart = useAppSelector(selectCartItems);
 
   const [color, setColor] = useState<string | null>("");
-  const colorSelectData = product.options[0].optionValues.map(
-    (value) => value.name
-  );
+  const colorSelectData: ComboboxData = product.options
+    ? product.options[0].optionValues?.map((value) => value.name)
+    : "";
 
   const [size, setSize] = useState<string | null>("");
-  const sizeSelectData = product.options[1].optionValues.map(
-    (value) => value.name
-  );
+  const sizeSelectData: ComboboxData = product.options
+    ? product.options[1].optionValues?.map((value) => value.name)
+    : "";
 
   const onAddToCartClick = async () => {
-    if (!color || !size) return;
-
     try {
-      const selectedProductIndex = product.variants.edges.findIndex(
-        (item) =>
-          item.node.selectedOptions[0].value === color &&
-          item.node.selectedOptions[1].value === size
+      const selectedProductIndex = product.variants?.edges.findIndex((item) =>
+        item.node.selectedOptions
+          ? item.node.selectedOptions[0].value === color &&
+            item.node.selectedOptions[1].value === size
+          : false
       );
+
+      if (!selectedProductIndex) return;
+
       const addToCartAction = await addProductToCart(
-        product.variants.edges[selectedProductIndex].node.id,
-        size,
-        color
+        product.variants?.edges[selectedProductIndex].node.id ?? "",
+        localStorage.getItem("cartId") ?? ""
       );
-      if (addToCartAction) {
-        dispatch(addItem({ ...product }));
+      if (addToCartAction && !localStorage.getItem("cartId")) {
         localStorage.setItem("cartId", addToCartAction.cartCreate.cart.id);
       }
-      console.log(addToCartAction);
     } catch (err) {
-      throw new Error(err);
+      if (typeof err === "string") throw new Error(err);
+      throw err;
     }
   };
 
   const alreadyInCart = cart.some(
-    (item) =>
+    (item: Product) =>
       item.id === product.id && item.color === color && item.size === size
   );
 
@@ -120,22 +135,23 @@ const ProductDescription = ({ product, addProductToCart }) => {
       <div className={styles.productCards}>
         <ProductDescriptionCard
           title="Opis o proizvodu"
-          desc={product.description}
+          desc={product.description ?? ""}
         />
 
-        <ProductDescriptionCard title="Sastav" desc={product.composition} />
+        <ProductDescriptionCard title="Sastav" desc={"product.composition"} />
       </div>
 
       <div className={styles.productCTA}>
         <span className={styles.productPrices}>
-          {product.maxVariantPrice !== product.minVariantPrice ? (
+          {product.priceRange?.maxVariantPrice?.amount !==
+          product.priceRange?.minVariantPrice?.amount ? (
             <Title
               order={5}
               size={isMobile ? "h6" : "h5"}
               c="#666666"
               td="line-through"
             >
-              {product.priceRange.maxVariantPrice.amount}€
+              {product.priceRange?.maxVariantPrice?.amount}€
             </Title>
           ) : (
             ""
@@ -145,7 +161,7 @@ const ProductDescription = ({ product, addProductToCart }) => {
             size={isMobile ? "h5" : "h4"}
             fw={isMobile ? 500 : 700}
           >
-            {product.priceRange.minVariantPrice.amount}€
+            {product.priceRange?.minVariantPrice?.amount}€
           </Title>
         </span>
 

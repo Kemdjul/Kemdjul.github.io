@@ -8,12 +8,15 @@ import { breakpoints } from "~/utils/breakpoints";
 import { useAppSelector } from "~/store/hooks";
 import { selectAllFilters } from "~/store/features/shop/filtersSlice";
 import styles from "./ShopProducts.module.scss";
+import { Product, Products } from "~/types/products";
 
-const ShopProducts = ({ products }) => {
+interface Props {
+  products: Products;
+}
+
+const ShopProducts = ({ products }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
   const allFilters = useAppSelector(selectAllFilters);
-
-  console.log(products);
 
   const breadcrumbsItems = [
     { title: "Naslovnica", href: "/" },
@@ -24,32 +27,36 @@ const ShopProducts = ({ products }) => {
     </Anchor>
   ));
 
-  const checkCategory = (product) => {
+  const checkCategory = (product: Product) => {
     return (
       !allFilters.category.length ||
-      allFilters.category.includes(product.node.category.name)
+      allFilters.category.includes(product.category?.name ?? "")
     );
   };
 
-  const checkSize = (product) => {
+  const checkSize = (product: Product) => {
+    if (!product.options) return false;
+
     return (
       !allFilters.size.length ||
-      product.node.options[1].optionValues.some((item) =>
-        allFilters.size.includes(item.name)
+      product.options[1].optionValues?.some((item) =>
+        allFilters.size.includes(item.name ?? "")
       )
     );
   };
 
-  const checkColor = (product) => {
+  const checkColor = (product: Product) => {
+    if (!product.options) return false;
+
     return (
       !allFilters.color.length ||
-      product.node.options[0].optionValues.some((item) =>
-        allFilters.color.includes(item.name)
+      product.options[0].optionValues?.some((item) =>
+        allFilters.color.includes(item.name ?? "")
       )
     );
   };
 
-  const checkIfFiltered = (product) => {
+  const checkIfFiltered = (product: Product) => {
     if (checkCategory(product) && checkSize(product) && checkColor(product))
       return true;
     return false;
@@ -94,9 +101,11 @@ const ShopProducts = ({ products }) => {
       </div>
 
       <div className={styles.productsItemsContainer}>
-        {products?.map((product) => {
-          if (checkIfFiltered(product))
-            return <ShopProductsItem product={product} key={product.id} />;
+        {products.edges?.map((product) => {
+          if (checkIfFiltered(product.node))
+            return (
+              <ShopProductsItem product={product.node} key={product.node.id} />
+            );
           return "";
         })}
       </div>

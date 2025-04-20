@@ -15,27 +15,30 @@ const ShopFilters = () => {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
 
-  const [category, setCategory] = useState("");
-  const [size, setSize] = useState([]);
-  const [color, setColor] = useState([]);
-  const [price, setPrice] = useState([0, 100]);
-  const [supplier, setSupplier] = useState([]);
+  const [category, setCategory] = useState<string | string[]>("");
+  const [size, setSize] = useState<string[]>([]);
+  const [color, setColor] = useState<string[]>([]);
+  const [price, setPrice] = useState<[number, number]>([0, 100]);
+  const [supplier, setSupplier] = useState<string[]>([]);
 
   useEffect(() => {
     dispatch(clearAllFilters());
   }, [dispatch]);
 
   const toggleFilter = (filter: string, items: string | string[]) => {
+    if (typeof items === "string") {
+      if (category === items) {
+        dispatch(setFilter({ filter: "category", items: "" }));
+        setCategory("");
+      } else {
+        dispatch(setFilter({ filter: "category", items: items }));
+        setCategory(items);
+      }
+
+      return;
+    }
+
     switch (filter) {
-      case "category":
-        if (category === items) {
-          dispatch(setFilter({ filter: "category", items: "" }));
-          setCategory("");
-        } else {
-          dispatch(setFilter({ filter: "category", items: items }));
-          setCategory(items);
-        }
-        break;
       case "size":
         setSize(items);
         dispatch(setFilter({ filter: "size", items: items }));

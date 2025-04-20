@@ -8,7 +8,12 @@ import styles from "./ProductDescriptionCard.module.scss";
 import ArrowUp from "~/assets/svg/ArrowUp";
 import ArrowDown from "~/assets/svg/ArrowDown";
 
-const ProductDescriptionCard = ({ title, desc }) => {
+interface Props {
+  title: string;
+  desc: string;
+}
+
+const ProductDescriptionCard = ({ title, desc }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
   const [isOpen, setIsOpen] = useState(false);
 

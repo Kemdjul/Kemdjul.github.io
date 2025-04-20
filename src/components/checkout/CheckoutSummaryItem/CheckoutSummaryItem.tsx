@@ -5,8 +5,13 @@ import { em, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
 import Counter from "~/components/global/Counter/Counter";
+import { Product } from "~/types/products";
 
-const CheckoutSummaryItem = ({ item }) => {
+interface Props {
+  item: Product;
+}
+
+const CheckoutSummaryItem = ({ item }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
 
   return (
@@ -14,9 +19,9 @@ const CheckoutSummaryItem = ({ item }) => {
       <div className={styles.checkoutProductUpper}>
         <span>
           <Image
-            loader={() => item.featuredImage.url}
-            src={item.featuredImage.url}
-            alt={item.featuredImage.alt}
+            loader={() => item.featuredImage?.url ?? ""}
+            src={item.featuredImage?.url ?? ""}
+            alt={item.featuredImage?.altText ?? ""}
             width={240}
             height={280}
             className={styles.productImage}
@@ -52,25 +57,30 @@ const CheckoutSummaryItem = ({ item }) => {
           </div>
 
           {!isMobile && (
-            <Text size="h5">{item.priceRange.minVariantPrice.amount}€</Text>
+            <Text size="h5">{item.priceRange?.minVariantPrice?.amount}€</Text>
           )}
         </div>
       </div>
 
       <div className={styles.checkoutProductLower}>
         <Counter
-          amount={item.amount}
+          amount={item.quantity}
           onAddClick={() => {}}
           onRemoveClick={() => {}}
         />
 
         {isMobile ? (
           <Text size="h6" fw={500}>
-            {item.priceRange.minVariantPrice.amount * item.amount}€
+            {item.quantity ??
+              0 * parseFloat(item.priceRange?.minVariantPrice?.amount ?? "")}
+            €
           </Text>
         ) : (
           <Text size="h5" fw={700}>
-            Ukupno: {item.priceRange.minVariantPrice.amount * item.amount}€
+            Ukupno:{" "}
+            {item.quantity ??
+              0 * parseFloat(item.priceRange?.minVariantPrice?.amount ?? "")}
+            €
           </Text>
         )}
       </div>

@@ -8,34 +8,20 @@ import Link from "next/link";
 import styles from "./SidebarCart.module.scss";
 
 import Trash from "~/assets/svg/Trash";
-import Cart from "~/assets/svg/Cart";
-import { useAppDispatch, useAppSelector } from "~/store/hooks";
-import {
-  selectCartTotal,
-  selectCartItems,
-  removeItem,
-} from "~/store/features/cart/cartSlice";
+import CartIcon from "~/assets/svg/Cart";
 import Image from "next/image";
+import { Cart, CartEdge } from "~/types/cart";
 
 interface Props {
   opened: boolean;
   close: () => void;
+  cart: Cart;
 }
 
-const SidebarCart = ({ opened, close }: Props) => {
+const SidebarCart = ({ opened, close, cart }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
-  const items = useAppSelector(selectCartItems);
-  const totalPrice = useAppSelector(selectCartTotal);
-  const dispatch = useAppDispatch();
 
-  const cartId = localStorage.getItem("cartId");
-  console.log(cartId);
-
-  const onDeleteClick = (product) => {
-    dispatch(
-      removeItem({ id: product.id, size: product.size, color: product.color })
-    );
-  };
+  const onDeleteClick = (product: CartEdge) => {};
 
   return (
     <Drawer
@@ -51,7 +37,7 @@ const SidebarCart = ({ opened, close }: Props) => {
     >
       <div className={styles.drawerUpper}>
         <span className={styles.drawerTitle}>
-          <Cart />
+          <CartIcon />
           <Title order={3} size={isMobile ? "h4" : "h3"} fw={700}>
             Košarica
           </Title>
@@ -60,12 +46,12 @@ const SidebarCart = ({ opened, close }: Props) => {
         <Separator />
 
         <ul className={styles.drawerProducts}>
-          {items.map((product) => (
-            <li key={product}>
+          {cart?.lines.edges.map((product: CartEdge) => (
+            <li key={product.node.id}>
               <Image
-                loader={() => product.featuredImage.url}
-                src={product.featuredImage.url}
-                alt={product.featuredImage.alt}
+                loader={() => product.node.merchandise?.image?.url ?? ""}
+                src={product.node.merchandise?.image?.url ?? ""}
+                alt={product.node.merchandise?.image?.altText ?? ""}
                 width={160}
                 height={160}
                 className={styles.productImage}
@@ -74,21 +60,21 @@ const SidebarCart = ({ opened, close }: Props) => {
               <div className={styles.drawerProduct}>
                 <span>
                   <Title order={5} size={isMobile ? "h6" : "h5"} fw={700}>
-                    {product.title}
+                    {product.node.merchandise?.product?.title}
                   </Title>
                   <Text size={isMobile ? "p" : "h6"}>
-                    {product.size}, {product.color}
+                    {product.node.merchandise?.title}
                   </Text>
                 </span>
 
                 <span className={styles.drawerProductPrice}>
                   <Counter
-                    amount={product.amount}
+                    amount={product.node.quantity ?? 0}
                     onAddClick={() => {}}
                     onRemoveClick={() => {}}
                   />
                   <Text size={isMobile ? "h5" : "h4"} fw={700}>
-                    {product.priceRange.minVariantPrice.amount}€
+                    {`${product.node.cost?.totalAmount?.amount}`}€
                   </Text>
                 </span>
               </div>
@@ -111,7 +97,7 @@ const SidebarCart = ({ opened, close }: Props) => {
         <div className={styles.drawerCTA}>
           <span className={styles.drawerTotalPrice}>
             <Text size={isMobile ? "h5" : "h4"} fw={700}>
-              Subtotal: {totalPrice}€
+              Subtotal: {`${cart?.cost?.totalAmount?.amount}`}€
             </Text>
             <Text size={isMobile ? "p" : "h6"}>
               Način dostave birate pri plaćanju.
@@ -119,7 +105,7 @@ const SidebarCart = ({ opened, close }: Props) => {
           </span>
 
           <span>
-            {items.length ? (
+            {cart?.lines.edges.length ? (
               <Link
                 href="/pregled"
                 className={styles.cartLink}

@@ -4,11 +4,12 @@ import styles from "./styles.module.scss";
 
 import * as motion from "motion/react-client";
 import { getAllProducts } from "~/utils/shopify";
+import { Products } from "~/types/products";
 
 const page = async () => {
-  const products = await getAllProducts(
-    process.env.SHOPIFY_ENDPOINT,
-    process.env.SHOPIFY_API_TOKEN
+  const products: Products = await getAllProducts(
+    process.env.SHOPIFY_ENDPOINT ?? "",
+    process.env.SHOPIFY_API_TOKEN ?? ""
   );
 
   return (

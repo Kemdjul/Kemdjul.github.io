@@ -1,12 +1,18 @@
 "use client";
 import { Card, Title } from "@mantine/core";
 import styles from "./ShopFiltersCard.module.scss";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import ArrowUp from "~/assets/svg/ArrowUp";
 import ArrowDown from "~/assets/svg/ArrowDown";
 import Button from "~/components/global/Button/Button";
 
-const ShopFiltersCard = ({ children, title, defaultShow = false }) => {
+interface Props {
+  children: ReactNode;
+  title: string;
+  defaultShow: boolean;
+}
+
+const ShopFiltersCard = ({ children, title, defaultShow = false }: Props) => {
   const [showCard, setShowCard] = useState(defaultShow);
 
   return showCard ? (

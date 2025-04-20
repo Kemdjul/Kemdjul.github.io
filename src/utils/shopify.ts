@@ -1,12 +1,12 @@
 "use server";
 import { gql, GraphQLClient } from "graphql-request";
+import { Cart } from "~/types/cart";
+import { Product, Products } from "~/types/products";
 
 export async function getAllProducts(
-  endpoint: string | undefined,
-  token: string | undefined
-) {
-  if (!token || !endpoint) return;
-
+  endpoint: string,
+  token: string
+): Promise<Products> {
   const graphQLClient = new GraphQLClient(endpoint, {
     headers: {
       "X-Shopify-Storefront-Access-Token": token,
@@ -49,11 +49,12 @@ export async function getAllProducts(
   `;
 
   try {
-    const getAllProductsResult =
+    const getAllProductsResult: { products: Products } =
       await graphQLClient.request(getAllProductsQuery);
-    return getAllProductsResult?.products.edges;
-  } catch (err) {
-    throw new Error(err, undefined);
+    return getAllProductsResult?.products;
+  } catch (err: unknown) {
+    if (typeof err === "string") throw new Error(err, undefined);
+    throw err;
   }
 }
 
@@ -61,7 +62,7 @@ export const getProduct = async (
   endpoint: string,
   token: string,
   id: string
-) => {
+): Promise<Product> => {
   const graphQLClient = new GraphQLClient(endpoint, {
     headers: {
       "X-Shopify-Storefront-Access-Token": token,
@@ -124,10 +125,14 @@ export const getProduct = async (
     id,
   };
   try {
-    const data = await graphQLClient.request(productQuery, variables);
+    const data: { product: Product } = await graphQLClient.request(
+      productQuery,
+      variables
+    );
     return data?.product;
   } catch (err) {
-    throw new Error(err);
+    if (typeof err === "string") throw new Error(err);
+    throw err;
   }
 };
 
@@ -135,8 +140,10 @@ export async function addToCart(
   endpoint: string,
   token: string,
   itemId: string,
-  quantity: string
-) {
+  quantity: number | string
+): Promise<Cart> {
+  if (typeof quantity === "string") quantity = parseInt(quantity);
+
   const graphQLClient = new GraphQLClient(endpoint, {
     headers: {
       "X-Shopify-Storefront-Access-Token": token,
@@ -156,7 +163,7 @@ export async function addToCart(
     cartInput: {
       lines: [
         {
-          quantity: parseInt(quantity),
+          quantity: quantity,
           merchandiseId: itemId,
         },
       ],
@@ -165,7 +172,8 @@ export async function addToCart(
   try {
     return await graphQLClient.request(createCartMutation, variables);
   } catch (err) {
-    throw new Error(err);
+    if (typeof err === "string") throw new Error(err);
+    throw err;
   }
 }
 
@@ -175,7 +183,7 @@ export async function updateCart(
   cartId: string,
   itemId: string,
   quantity: string
-) {
+): Promise<Cart> {
   const graphQLClient = new GraphQLClient(endpoint, {
     headers: {
       "X-Shopify-Storefront-Access-Token": token,
@@ -203,7 +211,8 @@ export async function updateCart(
   try {
     return await graphQLClient.request(updateCartMutation, variables);
   } catch (err) {
-    throw new Error(err);
+    if (typeof err === "string") throw new Error(err);
+    throw err;
   }
 }
 
@@ -211,7 +220,7 @@ export async function retrieveCart(
   endpoint: string,
   token: string,
   cartId: string
-) {
+): Promise<Cart> {
   const graphQLClient = new GraphQLClient(endpoint, {
     headers: {
       "X-Shopify-Storefront-Access-Token": token,
@@ -224,15 +233,42 @@ export async function retrieveCart(
         id
         createdAt
         updatedAt
-
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+        }
         lines(first: 10) {
           edges {
             node {
               id
               quantity
+              cost {
+                amountPerQuantity {
+                  amount
+                  currencyCode
+                }
+                totalAmount {
+                  amount
+                  currencyCode
+                }
+              }
               merchandise {
                 ... on ProductVariant {
                   id
+                  image {
+                    altText
+                    height
+                    width
+                    id
+                    url
+                  }
+                  product {
+                    id
+                    title
+                  }
+                  title
                 }
               }
             }
@@ -250,10 +286,14 @@ export async function retrieveCart(
     cartId,
   };
   try {
-    const data = await graphQLClient.request(cartQuery, variables);
+    const data: { cart: Cart } = await graphQLClient.request(
+      cartQuery,
+      variables
+    );
     return data?.cart;
   } catch (err) {
-    throw new Error(err);
+    if (typeof err === "string") throw new Error(err);
+    throw err;
   }
 }
 
@@ -261,7 +301,7 @@ export const getCheckoutUrl = async (
   endpoint: string,
   token: string,
   cartId: string
-) => {
+): Promise<any> => {
   const graphQLClient = new GraphQLClient(endpoint, {
     headers: {
       "X-Shopify-Storefront-Access-Token": token,
@@ -282,6 +322,7 @@ export const getCheckoutUrl = async (
   try {
     return await graphQLClient.request(getCheckoutUrlQuery, variables);
   } catch (err) {
-    throw new Error(err);
+    if (typeof err === "string") throw new Error(err);
+    throw err;
   }
 };

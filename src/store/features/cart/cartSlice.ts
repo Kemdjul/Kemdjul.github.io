@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "~/store/store";
+import { Product } from "~/types/products";
 
 export interface CartState {
-  items: any;
+  items: Product[];
   totalPrice: number;
 }
 
@@ -17,7 +18,7 @@ export const cartSlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       const itemInCartIndex = state.items.findIndex(
-        (item) =>
+        (item: Product) =>
           item.id === action.payload.id &&
           item.color === action.payload.color &&
           item.size === action.payload.size
@@ -26,7 +27,8 @@ export const cartSlice = createSlice({
       if (itemInCartIndex === -1) {
         state.items.push({ ...action.payload, amount: 1 });
       } else {
-        state.items[itemInCartIndex].amount++;
+        if (state.items[itemInCartIndex].quantity)
+          state.items[itemInCartIndex].quantity++;
       }
 
       state.totalPrice += Number(
@@ -35,15 +37,15 @@ export const cartSlice = createSlice({
     },
     removeItem: (state, action) => {
       const itemIndex = state.items.findIndex(
-        (item) =>
+        (item: Product) =>
           item.id === action.payload.id &&
           item.color === action.payload.color &&
           item.size === action.payload.size
       );
 
       state.totalPrice -=
-        Number(state.items[itemIndex].priceRange.minVariantPrice.amount) *
-        state.items[itemIndex].amount;
+        Number(state.items[itemIndex].priceRange?.minVariantPrice?.amount) *
+        (state.items[itemIndex].quantity ?? 1);
 
       state.items.splice(itemIndex, 1);
     },

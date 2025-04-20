@@ -3,7 +3,13 @@ import { Text } from "@mantine/core";
 import Button from "../Button/Button";
 import styles from "./Counter.module.scss";
 
-const Counter = ({ amount, onAddClick, onRemoveClick }) => {
+interface Props {
+  amount: number;
+  onAddClick: () => void;
+  onRemoveClick: () => void;
+}
+
+const Counter = ({ amount, onAddClick, onRemoveClick }: Props) => {
   return (
     <div className={styles.counter}>
       <Button
