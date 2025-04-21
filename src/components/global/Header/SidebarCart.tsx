@@ -1,3 +1,4 @@
+"use client";
 import Separator from "../Separator/Separator";
 import Counter from "../Counter/Counter";
 import Button from "../Button/Button";
@@ -10,18 +11,30 @@ import styles from "./SidebarCart.module.scss";
 import Trash from "~/assets/svg/Trash";
 import CartIcon from "~/assets/svg/Cart";
 import Image from "next/image";
-import { Cart, CartEdge } from "~/types/cart";
+import { CartEdge } from "~/types/cart";
+import { removeItem, selectCart } from "~/store/features/cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "~/store/hooks";
+import { removeProductFromCartPromise } from "~/utils/shopify";
 
 interface Props {
   opened: boolean;
   close: () => void;
-  cart: Cart;
 }
 
-const SidebarCart = ({ opened, close, cart }: Props) => {
+const SidebarCart = ({ opened, close }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+  const cart = useAppSelector(selectCart);
+  const dispatch = useAppDispatch();
 
-  const onDeleteClick = (product: CartEdge) => {};
+  const onDeleteClick = (product: CartEdge) => {
+    try {
+      removeProductFromCartPromise(cart.id, product.node.id);
+      dispatch(removeItem(product));
+    } catch (err) {
+      if (typeof err === "string") throw new Error(err);
+      throw err;
+    }
+  };
 
   return (
     <Drawer
@@ -46,7 +59,7 @@ const SidebarCart = ({ opened, close, cart }: Props) => {
         <Separator />
 
         <ul className={styles.drawerProducts}>
-          {cart?.lines.edges.map((product: CartEdge) => (
+          {cart?.lines.edges?.map((product: CartEdge) => (
             <li key={product.node.id}>
               <Image
                 loader={() => product.node.merchandise?.image?.url ?? ""}
@@ -105,7 +118,7 @@ const SidebarCart = ({ opened, close, cart }: Props) => {
           </span>
 
           <span>
-            {cart?.lines.edges.length ? (
+            {cart?.lines.edges?.length ? (
               <Link
                 href="/pregled"
                 className={styles.cartLink}

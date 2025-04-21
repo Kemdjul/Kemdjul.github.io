@@ -5,23 +5,35 @@ import { em, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
 import Counter from "~/components/global/Counter/Counter";
-import { Product } from "~/types/products";
+import { CartEdge } from "~/types/cart";
 
 interface Props {
-  item: Product;
+  item: CartEdge;
 }
 
 const CheckoutSummaryItem = ({ item }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
 
   return (
-    <li className={styles.checkoutProductItem} key={item}>
+    <li className={styles.checkoutProductItem} key={item.node.id}>
       <div className={styles.checkoutProductUpper}>
         <span>
           <Image
-            loader={() => item.featuredImage?.url ?? ""}
-            src={item.featuredImage?.url ?? ""}
-            alt={item.featuredImage?.altText ?? ""}
+            loader={() =>
+              item.node.merchandise?.image
+                ? item.node.merchandise.image.url
+                : ""
+            }
+            src={
+              item.node.merchandise?.image
+                ? item.node.merchandise.image.url
+                : ""
+            }
+            alt={
+              item.node.merchandise?.image
+                ? item.node.merchandise.image.altText
+                : ""
+            }
             width={240}
             height={280}
             className={styles.productImage}
@@ -35,9 +47,11 @@ const CheckoutSummaryItem = ({ item }: Props) => {
               size={isMobile ? "h5" : "h3"}
               fw={isMobile ? 500 : 700}
             >
-              {item.title}
+              {item.node.merchandise?.product?.title}
             </Title>
-            <Text size={isMobile ? "p" : "h6"}>{item.description}</Text>
+            <Text size={isMobile ? "p" : "h6"}>
+              {item.node.merchandise?.product?.description}
+            </Text>
           </span>
 
           <div className={styles.checkoutProductSelects}>
@@ -45,41 +59,47 @@ const CheckoutSummaryItem = ({ item }: Props) => {
               <Title order={4} size={isMobile ? "p" : "h6"}>
                 Veličina:
               </Title>
-              <Text>{item.size}</Text>
+              <Text>
+                {item.node.merchandise?.selectedOptions &&
+                  item.node.merchandise?.selectedOptions[0].value}
+              </Text>
             </span>
 
             <span className={styles.checkoutProductSelect}>
               <Title order={4} size={isMobile ? "p" : "h6"}>
                 Boja:
               </Title>
-              <Text>{item.color}</Text>
+              <Text>
+                {item.node.merchandise?.selectedOptions &&
+                  item.node.merchandise?.selectedOptions[1].value}
+              </Text>
             </span>
           </div>
 
           {!isMobile && (
-            <Text size="h5">{item.priceRange?.minVariantPrice?.amount}€</Text>
+            <Text size="h5">{item.node.cost?.amountPerQuantity?.amount}€</Text>
           )}
         </div>
       </div>
 
       <div className={styles.checkoutProductLower}>
         <Counter
-          amount={item.quantity}
+          amount={item.node.quantity}
           onAddClick={() => {}}
           onRemoveClick={() => {}}
         />
 
         {isMobile ? (
           <Text size="h6" fw={500}>
-            {item.quantity ??
-              0 * parseFloat(item.priceRange?.minVariantPrice?.amount ?? "")}
+            {item.node.quantity ??
+              0 * parseFloat(item.node.merchandise?.price?.amount ?? "")}
             €
           </Text>
         ) : (
           <Text size="h5" fw={700}>
             Ukupno:{" "}
-            {item.quantity ??
-              0 * parseFloat(item.priceRange?.minVariantPrice?.amount ?? "")}
+            {item.node.quantity ??
+              0 * parseFloat(item.node.merchandise?.price?.amount ?? "")}
             €
           </Text>
         )}

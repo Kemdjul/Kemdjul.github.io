@@ -8,11 +8,11 @@ import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
 import Link from "next/link";
 import { useAppSelector } from "~/store/hooks";
-import { selectCartTotal } from "~/store/features/cart/cartSlice";
+import { selectCart } from "~/store/features/cart/cartSlice";
 
 const CartSummary = () => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
-  const totalPrice = useAppSelector(selectCartTotal);
+  const cart = useAppSelector(selectCart);
 
   return (
     <section className={styles.container}>
@@ -25,12 +25,15 @@ const CartSummary = () => {
       <div className={styles.summaryPrice}>
         <span>
           <Title order={4} size={isMobile ? "h6" : "h4"} fw={700}>
-            Ukupno: {totalPrice ? totalPrice + 2 : "0"}€
+            Ukupno:
+            {cart.cost?.totalAmount?.amount &&
+              parseFloat(cart.cost?.totalAmount?.amount) + 2}
+            €
           </Title>
           <Text size={isMobile ? "p" : "h6"}>Troškovi dostave: 2.00€</Text>
         </span>
 
-        {totalPrice ? (
+        {cart.cost?.totalAmount?.amount !== "0.00" ? (
           <Link href="/pregled" style={{ textDecoration: "none" }}>
             <Button>
               <Text size="h5">Nastavi na plaćanje</Text>

@@ -20,6 +20,7 @@ export interface CartItem {
   id: string;
   merchandise?: ProductVariant;
   quantity: number;
+  title?: string;
 }
 
 export interface CartEdge {
@@ -28,7 +29,7 @@ export interface CartEdge {
 }
 
 export interface CartLine {
-  edges: CartEdge[];
+  edges?: CartEdge[];
   nodes?: CartItem[];
 }
 

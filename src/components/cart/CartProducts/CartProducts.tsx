@@ -5,12 +5,12 @@ import styles from "./CartProducts.module.scss";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
 import { useAppSelector } from "~/store/hooks";
-import { selectCartItems } from "~/store/features/cart/cartSlice";
+import { selectCart } from "~/store/features/cart/cartSlice";
 import CartProductsItem from "../CartProductsItem/CartProductsItem";
 
 const CartProducts = () => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
-  const items = useAppSelector(selectCartItems);
+  const cart = useAppSelector(selectCart);
 
   return (
     <section className={styles.container}>
@@ -21,8 +21,10 @@ const CartProducts = () => {
       <Separator />
 
       <ul className={styles.cartProducts}>
-        {items.length ? (
-          items.map((item) => <CartProductsItem item={item} key={item} />)
+        {cart.lines.edges?.length ? (
+          cart.lines.edges.map((item) => (
+            <CartProductsItem item={item} key={item} />
+          ))
         ) : (
           <Text>Košarica vam je prazna</Text>
         )}

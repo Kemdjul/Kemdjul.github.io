@@ -15,34 +15,32 @@ import Search from "~/assets/svg/Search";
 import * as motion from "motion/react-client";
 import Close from "~/assets/svg/Close";
 import { breakpoints } from "~/utils/breakpoints";
-import { Cart } from "~/types/cart";
+import { useAppDispatch } from "~/store/hooks";
+import { setCart } from "~/store/features/cart/cartSlice";
+import { retrieveCart } from "~/utils/shopify";
 
-interface Props {
-  fetchCartProducts: (cartId: string) => Promise<Cart>;
-}
-
-const Header = ({ fetchCartProducts }: Props) => {
+const Header = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
-  const [cart, setCart] = useState<Cart>();
   const cartId = localStorage.getItem("cartId") ?? "";
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await fetchCartProducts(cartId);
+        const res = await retrieveCart(cartId);
+        dispatch(setCart(res));
         console.log(res);
-        setCart(await res);
       } catch (err) {
         console.log(err);
         throw err;
       }
     };
 
-    fetch();
-  }, [fetchCartProducts, cartId]);
+    if (cartId) fetch();
+  }, [cartId, dispatch]);
 
   return (
     <>
@@ -156,7 +154,7 @@ const Header = ({ fetchCartProducts }: Props) => {
         </motion.div>
       </header>
 
-      <SidebarCart opened={opened} close={close} cart={cart} />
+      <SidebarCart opened={opened} close={close} />
     </>
   );
 };

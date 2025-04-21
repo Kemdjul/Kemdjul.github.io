@@ -11,7 +11,7 @@ import "~/assets/css/index.scss";
 import "@mantine/core/styles.layer.css";
 import "@mantine/carousel/styles.layer.css";
 
-import HeaderServer from "~/components/global/Header/HeaderServer";
+import Header from "~/components/global/Header/Header";
 import Footer from "~/components/global/Footer/Footer";
 import { breakpoints } from "~/utils/breakpoints";
 import StoreProvider from "./StoreProvider";
@@ -144,7 +144,7 @@ export default function RootLayout({
       <body>
         <StoreProvider>
           <MantineProvider theme={theme}>
-            <HeaderServer />
+            <Header />
             {children}
             <Footer />
           </MantineProvider>

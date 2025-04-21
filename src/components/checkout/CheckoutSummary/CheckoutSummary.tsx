@@ -5,16 +5,14 @@ import styles from "./CheckoutSummary.module.scss";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
 import { useAppSelector } from "~/store/hooks";
-import {
-  selectCartItems,
-  selectCartTotal,
-} from "~/store/features/cart/cartSlice";
+
 import CheckoutSummaryItem from "../CheckoutSummaryItem/CheckoutSummaryItem";
+import { selectCart } from "~/store/features/cart/cartSlice";
+import { CartEdge } from "~/types/cart";
 
 const CheckoutSummary = () => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
-  const totalPrice = useAppSelector(selectCartTotal);
-  const items = useAppSelector(selectCartItems);
+  const cart = useAppSelector(selectCart);
 
   return (
     <section className={styles.container}>
@@ -26,7 +24,11 @@ const CheckoutSummary = () => {
 
       <span>
         <Text size={isMobile ? "h6" : "h4"} fw={700}>
-          Ukupno: {totalPrice ? totalPrice + 2 : "0"}€
+          Ukupno:{" "}
+          {cart.cost?.totalAmount?.amount
+            ? parseFloat(cart.cost?.totalAmount?.amount) + 2
+            : "0"}
+          €
         </Text>
         <Text size={isMobile ? "h6" : "h4"}>Troškovi dostave: 2.00€</Text>
       </span>
@@ -34,8 +36,8 @@ const CheckoutSummary = () => {
       <Separator />
 
       <ul className={styles.checkoutProducts}>
-        {items.map((item) => (
-          <CheckoutSummaryItem item={item} key={item} />
+        {cart.lines.edges?.map((edge: CartEdge) => (
+          <CheckoutSummaryItem item={edge} key={edge.node.id} />
         ))}
       </ul>
     </section>

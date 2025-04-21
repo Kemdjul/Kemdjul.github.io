@@ -6,22 +6,25 @@ import { useMediaQuery } from "@mantine/hooks";
 import { em, Text, Title } from "@mantine/core";
 import { breakpoints } from "~/utils/breakpoints";
 import Counter from "~/components/global/Counter/Counter";
-import { Product } from "~/types/products";
+import { CartEdge } from "~/types/cart";
+import { useAppSelector } from "~/store/hooks";
+import { selectCart } from "~/store/features/cart/cartSlice";
 
 interface Props {
-  item: Product;
+  item: CartEdge;
 }
 
 const CartProductsItem = ({ item }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
+  const cart = useAppSelector(selectCart);
 
   return (
-    <li className={styles.cartProductItem} key={item}>
+    <li className={styles.cartProductItem} key={item.node.id}>
       <div className={styles.cartProductUpper}>
         <Image
-          loader={() => item.featuredImage?.url ?? ""}
-          src={item.featuredImage?.url ?? ""}
-          alt={item.featuredImage?.altText ?? ""}
+          loader={() => item.node.merchandise?.image?.url ?? ""}
+          src={item.node.merchandise?.image?.url ?? ""}
+          alt={item.node.merchandise?.image?.altText ?? ""}
           width={240}
           height={280}
           className={styles.productImage}
@@ -30,9 +33,11 @@ const CartProductsItem = ({ item }: Props) => {
         <div className={styles.cartProductDesc}>
           <span className={styles.cartProductName}>
             <Title order={4} size="h5" fw={isMobile ? 500 : 700}>
-              {item.title}
+              {item.node.merchandise?.product?.title}
             </Title>
-            <Text size={isMobile ? "p" : "h6"}>{item.description}</Text>
+            <Text size={isMobile ? "p" : "h6"}>
+              {item.node.merchandise?.product?.description}
+            </Text>
           </span>
 
           <div className={styles.cartProductSelects}>
@@ -40,35 +45,32 @@ const CartProductsItem = ({ item }: Props) => {
               <Title order={4} size={isMobile ? "p" : "h6"}>
                 Veličina:
               </Title>
-              <Text>{item.size}</Text>
+              <Text>{item.node.merchandise?.title?.split(" ")[2]}</Text>
             </span>
 
             <span className={styles.cartProductSelect}>
               <Title order={4} size={isMobile ? "p" : "h6"}>
                 Boja:
               </Title>
-              <Text>{item.color}</Text>
+              <Text>{item.node.merchandise?.title?.split(" ")[0]}</Text>
             </span>
           </div>
 
           <Text size="h5" className={styles.hidden}>
-            {item.priceRange?.minVariantPrice?.amount}€
+            {item.node.cost?.totalAmount?.amount}€
           </Text>
         </div>
       </div>
 
       <div className={styles.cartProductLower}>
         <Counter
-          amount={item.quantity}
+          amount={item.node.quantity}
           onAddClick={() => {}}
           onRemoveClick={() => {}}
         />
 
         <Text size="h5" fw={700}>
-          Ukupno:{" "}
-          {item.quantity ??
-            0 * parseFloat(item.priceRange?.minVariantPrice?.amount ?? "")}
-          €
+          Ukupno: {cart.cost?.totalAmount?.amount ?? "0.00"}€
         </Text>
       </div>
     </li>

@@ -14,11 +14,12 @@ import styles from "./ProductDescription.module.scss";
 import { useMediaQuery } from "@mantine/hooks";
 import { breakpoints } from "~/utils/breakpoints";
 import ProductDescriptionCard from "./ProductDescriptionCard/ProductDescriptionCard";
-import { useAppDispatch, useAppSelector } from "~/store/hooks";
-import { addItem, selectCartItems } from "~/store/features/cart/cartSlice";
 import { useState } from "react";
 import { Product } from "~/types/products";
-import { Cart } from "~/types/cart";
+import { Cart, CartEdge } from "~/types/cart";
+import { useAppDispatch, useAppSelector } from "~/store/hooks";
+import { addItem, selectCart } from "~/store/features/cart/cartSlice";
+import { formatToProductVariant } from "~/utils/formatting";
 
 interface Props {
   product: Product;
@@ -28,7 +29,7 @@ interface Props {
 const ProductDescription = ({ product, addProductToCart }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(breakpoints.lg)})`);
   const dispatch = useAppDispatch();
-  const cart = useAppSelector(selectCartItems);
+  const cart = useAppSelector(selectCart);
 
   const [color, setColor] = useState<string | null>("");
   const colorSelectData: ComboboxData = product.options
@@ -49,13 +50,22 @@ const ProductDescription = ({ product, addProductToCart }: Props) => {
           : false
       );
 
-      if (!selectedProductIndex) return;
+      if (selectedProductIndex === -1 || selectedProductIndex === undefined)
+        return;
+
+      const selectedProductVariant = formatToProductVariant(
+        product,
+        product.variants.edges[selectedProductIndex]
+      );
 
       const addToCartAction = await addProductToCart(
         product.variants?.edges[selectedProductIndex].node.id ?? "",
         localStorage.getItem("cartId") ?? ""
       );
-      if (addToCartAction && !localStorage.getItem("cartId")) {
+
+      dispatch(addItem(selectedProductVariant));
+
+      if (!localStorage.getItem("cartId")) {
         localStorage.setItem("cartId", addToCartAction.cartCreate.cart.id);
       }
     } catch (err) {
@@ -64,9 +74,11 @@ const ProductDescription = ({ product, addProductToCart }: Props) => {
     }
   };
 
-  const alreadyInCart = cart.some(
-    (item: Product) =>
-      item.id === product.id && item.color === color && item.size === size
+  const alreadyInCart = cart.lines.edges?.find(
+    (item: CartEdge) =>
+      item.node.merchandise?.product?.id === product.id &&
+      item.node.merchandise?.title?.split(" ")[0] === color &&
+      item.node.merchandise?.title?.split(" ")[2] === size
   );
 
   const items = [

@@ -1,18 +1,15 @@
 "use server";
 import { gql, GraphQLClient } from "graphql-request";
 import { Cart } from "~/types/cart";
-import { Product, Products } from "~/types/products";
+import { Product, Products, ProductVariant } from "~/types/products";
 
-export async function getAllProducts(
-  endpoint: string,
-  token: string
-): Promise<Products> {
-  const graphQLClient = new GraphQLClient(endpoint, {
-    headers: {
-      "X-Shopify-Storefront-Access-Token": token,
-    },
-  });
+const graphQLClient = new GraphQLClient(process.env.SHOPIFY_ENDPOINT ?? "", {
+  headers: {
+    "X-Shopify-Storefront-Access-Token": process.env.SHOPIFY_API_TOKEN ?? "",
+  },
+});
 
+export async function getAllProducts(): Promise<Products> {
   const getAllProductsQuery = gql`
     {
       products(first: 250) {
@@ -58,17 +55,7 @@ export async function getAllProducts(
   }
 }
 
-export const getProduct = async (
-  endpoint: string,
-  token: string,
-  id: string
-): Promise<Product> => {
-  const graphQLClient = new GraphQLClient(endpoint, {
-    headers: {
-      "X-Shopify-Storefront-Access-Token": token,
-    },
-  });
-
+export const getProduct = async (id: string): Promise<Product> => {
   const productQuery = gql`
     query getProduct($id: ID!) {
       product(id: $id) {
@@ -115,6 +102,18 @@ export const getProduct = async (
                 name
                 value
               }
+              image {
+                altText
+                height
+                width
+                id
+                url
+              }
+              price {
+                amount
+                currencyCode
+              }
+              title
             }
           }
         }
@@ -137,18 +136,10 @@ export const getProduct = async (
 };
 
 export async function addToCart(
-  endpoint: string,
-  token: string,
   itemId: string,
   quantity: number | string
 ): Promise<Cart> {
   if (typeof quantity === "string") quantity = parseInt(quantity);
-
-  const graphQLClient = new GraphQLClient(endpoint, {
-    headers: {
-      "X-Shopify-Storefront-Access-Token": token,
-    },
-  });
 
   const createCartMutation = gql`
     mutation createCart($cartInput: CartInput) {
@@ -178,18 +169,10 @@ export async function addToCart(
 }
 
 export async function updateCart(
-  endpoint: string,
-  token: string,
   cartId: string,
   itemId: string,
   quantity: string
 ): Promise<Cart> {
-  const graphQLClient = new GraphQLClient(endpoint, {
-    headers: {
-      "X-Shopify-Storefront-Access-Token": token,
-    },
-  });
-
   const updateCartMutation = gql`
     mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
       cartLinesAdd(cartId: $cartId, lines: $lines) {
@@ -216,17 +199,40 @@ export async function updateCart(
   }
 }
 
-export async function retrieveCart(
-  endpoint: string,
-  token: string,
-  cartId: string
+export async function removeProductFromCartPromise(
+  cartId: string,
+  itemId: string
 ): Promise<Cart> {
-  const graphQLClient = new GraphQLClient(endpoint, {
-    headers: {
-      "X-Shopify-Storefront-Access-Token": token,
-    },
-  });
+  const remoteProductFromCartMutation = gql`
+    mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+      cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+        cart {
+          id
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+  const variables = {
+    cartId: cartId,
+    lineIds: [itemId],
+  };
 
+  try {
+    return await graphQLClient.request(
+      remoteProductFromCartMutation,
+      variables
+    );
+  } catch (err) {
+    if (typeof err === "string") throw new Error(err);
+    throw err;
+  }
+}
+
+export async function retrieveCart(cartId: string): Promise<Cart> {
   const cartQuery = gql`
     query cartQuery($cartId: ID!) {
       cart(id: $cartId) {
@@ -297,17 +303,7 @@ export async function retrieveCart(
   }
 }
 
-export const getCheckoutUrl = async (
-  endpoint: string,
-  token: string,
-  cartId: string
-): Promise<any> => {
-  const graphQLClient = new GraphQLClient(endpoint, {
-    headers: {
-      "X-Shopify-Storefront-Access-Token": token,
-    },
-  });
-
+export const getCheckoutUrl = async (cartId: string): Promise<any> => {
   const getCheckoutUrlQuery = gql`
     query checkoutURL($cartId: ID!) {
       cart(id: $cartId) {

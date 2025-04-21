@@ -16,8 +16,6 @@ interface Props {
 
 const page = async ({ params }: Props) => {
   const product: Product = await getProduct(
-    process.env.SHOPIFY_ENDPOINT ?? "",
-    process.env.SHOPIFY_API_TOKEN ?? "",
     `gid://shopify/Product/${params.slug}`
   );
 
@@ -28,21 +26,10 @@ const page = async ({ params }: Props) => {
     "use server";
     try {
       if (cartId) {
-        const result = updateCart(
-          process.env.SHOPIFY_ENDPOINT ?? "",
-          process.env.SHOPIFY_API_TOKEN ?? "",
-          cartId,
-          id,
-          "1"
-        );
+        const result = updateCart(cartId, id, "1");
         return result;
       } else {
-        const result = addToCart(
-          process.env.SHOPIFY_ENDPOINT ?? "",
-          process.env.SHOPIFY_API_TOKEN ?? "",
-          id,
-          "1"
-        );
+        const result = addToCart(id, "1");
         return result;
       }
     } catch (err) {

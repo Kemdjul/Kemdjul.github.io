@@ -1,15 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "~/store/store";
-import { Product } from "~/types/products";
+import { Cart, CartEdge } from "~/types/cart";
 
-export interface CartState {
-  items: Product[];
-  totalPrice: number;
+/* interface FetchProductsFromShopifyProps {
+  endpoint: string;
+  token: string;
+  cartId: string;
 }
 
-const initialState: CartState = {
-  items: [],
-  totalPrice: 0,
+export const fetchProductsFromShopify = createAsyncThunk(
+  "cart/fetchProducts",
+  async ({ endpoint, token, cartId }: FetchProductsFromShopifyProps) => {
+    const response = await retrieveCart(endpoint, token, cartId);
+    return response;
+  }
+); */
+
+const initialState: Cart = {
+  id: "",
+  lines: {},
+  cost: {
+    subtotalAmount: { amount: "0.00", currencyCode: "EUR" },
+    totalAmount: { amount: "0.00", currencyCode: "EUR" },
+  },
+  totalQuantity: 0,
 };
 
 export const cartSlice = createSlice({
@@ -17,43 +31,54 @@ export const cartSlice = createSlice({
   initialState: initialState,
   reducers: {
     addItem: (state, action) => {
-      const itemInCartIndex = state.items.findIndex(
-        (item: Product) =>
-          item.id === action.payload.id &&
-          item.color === action.payload.color &&
-          item.size === action.payload.size
+      const productInCartIndex = state.lines.edges?.findIndex(
+        (edge: CartEdge) => edge.node.id === action.payload.id
       );
 
-      if (itemInCartIndex === -1) {
-        state.items.push({ ...action.payload, amount: 1 });
+      if (
+        productInCartIndex === -1 ||
+        productInCartIndex === undefined ||
+        !state.lines.edges
+      ) {
+        state.lines.edges?.push(action.payload);
       } else {
-        if (state.items[itemInCartIndex].quantity)
-          state.items[itemInCartIndex].quantity++;
+        if (state.lines.edges[productInCartIndex].node.quantity)
+          state.lines.edges[productInCartIndex].node.quantity++;
       }
 
-      state.totalPrice += Number(
-        action.payload.priceRange.minVariantPrice.amount
-      );
+      state.cost.totalAmount.amount = (
+        parseFloat(state.cost.totalAmount.amount) +
+        parseFloat(action.payload.node.cost.totalAmount.amount)
+      ).toString();
     },
     removeItem: (state, action) => {
-      const itemIndex = state.items.findIndex(
-        (item: Product) =>
-          item.id === action.payload.id &&
-          item.color === action.payload.color &&
-          item.size === action.payload.size
+      const edgeIndex = state.lines.edges?.findIndex(
+        (edge: CartEdge) => edge.node.id === action.payload.node.id
       );
+      if (edgeIndex === -1 || edgeIndex === undefined || !state.lines.edges)
+        return;
 
-      state.totalPrice -=
-        Number(state.items[itemIndex].priceRange?.minVariantPrice?.amount) *
-        (state.items[itemIndex].quantity ?? 1);
+      state.cost.totalAmount.amount = (
+        parseFloat(state.cost?.totalAmount?.amount ?? "") -
+        parseFloat(
+          state.lines.edges[edgeIndex].node.cost?.totalAmount?.amount ?? ""
+        )
+      ).toString();
 
-      state.items.splice(itemIndex, 1);
+      state.lines.edges?.splice(edgeIndex, 1);
+    },
+    setCart: (state, action) => {
+      state.id = action.payload.id;
+      state.cost = action.payload.cost;
+      state.createdAt = action.payload.createdAt;
+      state.lines = action.payload.lines;
+      state.totalQuantity = action.payload.totalQuantity;
+      state.updatedAt = action.payload.updatedAt;
     },
   },
 });
 
-export const selectCartItems = (state: RootState) => state.cart.items;
-export const selectCartTotal = (state: RootState) => state.cart.totalPrice;
-export const { addItem, removeItem } = cartSlice.actions;
+export const selectCart = (state: RootState) => state.cart;
+export const { addItem, removeItem, setCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

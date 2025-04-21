@@ -41,6 +41,7 @@ export interface ProductVariant {
   product?: Product;
   selectedOptions?: ProductSelectedOption[];
   title?: string;
+  price?: Money;
 }
 
 export interface ProductVariantsEdge {
